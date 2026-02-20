@@ -204,7 +204,7 @@
                                         ${val.productCode || ''} - ${val.productName || ''}
                                     </td>
                                     <td style="text-align: center;">
-                                        ${val.productUnitPriceCurrencyValue || ''}
+                                        ${currencyTotal(val.productUnitPriceCurrencyValue || 0)}
                                     </td>
                                     <td style="text-align: center;">
                                         <div class="input-group">
@@ -247,18 +247,19 @@
                                             <input id="coaName${key}" style="border-radius:0;width:130px;background-color:white;" class="form-control" readonly />
                                         </div>
                                     </td>
-                                    <td style="text-align: center;">
+                                    <td style="text-align: center;padding-right: .3rem;">
                                         <select class="form-control" id="coaStatus${key}">
                                             <option value="" disabled selected>Select a ...</option>
                                             <option value="214000000000001">Debit</option>
                                             <option value="214000000000001">Credit</option>
                                         </select>
                                     </td>
-                                    <td style="text-align: center;padding-right: .3rem;">
-                                        <input id="value${key}" class="form-control number-without-negative" data-index='' autocomplete="off" readonly style="border-radius:0px;" />
-                                    </td>
                                 </tr>
                             `;
+
+                            // <td style="text-align: center;padding-right: .3rem;">
+                            //     <input id="value${key}" class="form-control number-without-negative" data-index='' autocomplete="off" readonly style="border-radius:0px;" />
+                            // </td>
 
                             // <input id="depreciationYears${key}" class="form-control number-without-negative" style="border-radius:0px;" readonly />
                             // <input id="depreciationRate${key}" class="form-control number-without-negative" style="border-radius:0px;" readonly />
