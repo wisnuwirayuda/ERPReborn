@@ -105,7 +105,6 @@
                         <th style="padding-top: 10px;padding-bottom: 10px;border:1px solid #e9ecef;text-align: center;background-color:#4B586A;color:white;">DEP. RATE</th>
                         <th style="padding-top: 10px;padding-bottom: 10px;border:1px solid #e9ecef;text-align: center;background-color:#4B586A;color:white;">COA</th>
                         <th style="padding-top: 10px;padding-bottom: 10px;border:1px solid #e9ecef;text-align: center;background-color:#4B586A;color:white;">COA STATUS</th>
-                        <th style="padding-top: 10px;padding-bottom: 10px;border:1px solid #e9ecef;text-align: center;background-color:#4B586A;color:white;">VALUE</th>
                     </tr>
                 </thead>
                 
@@ -122,7 +121,6 @@
                         <td style="border:1px solid #4B586A;color:#4B586A;">12.5</td>
                         <td style="border:1px solid #4B586A;color:#4B586A;">1-1103 - Kas</td>
                         <td style="border:1px solid #4B586A;color:#4B586A;">Debit</td>
-                        <td style="border:1px solid #4B586A;color:#4B586A;">75,146.00</td>
                     </tr>
                     <tr>
                         <td style="border:1px solid #4B586A;color:#4B586A;text-align:center;">2</td>
@@ -136,7 +134,6 @@
                         <td style="border:1px solid #4B586A;color:#4B586A;">6.25</td>
                         <td style="border:1px solid #4B586A;color:#4B586A;">1-1201 - Bank</td>
                         <td style="border:1px solid #4B586A;color:#4B586A;">Debit</td>
-                        <td style="border:1px solid #4B586A;color:#4B586A;">150,000.00</td>
                     </tr>
                     <tr>
                         <td style="border:1px solid #4B586A;color:#4B586A;text-align:center;">3</td>
@@ -150,7 +147,6 @@
                         <td style="border:1px solid #4B586A;color:#4B586A;">10</td>
                         <td style="border:1px solid #4B586A;color:#4B586A;">1-1302 - Piutang</td>
                         <td style="border:1px solid #4B586A;color:#4B586A;">Credit</td>
-                        <td style="border:1px solid #4B586A;color:#4B586A;">170,000.00</td>
                     </tr>
                     <tr>
                         <td style="border:1px solid #4B586A;color:#4B586A;text-align:center;">4</td>
@@ -164,7 +160,6 @@
                         <td style="border:1px solid #4B586A;color:#4B586A;">25</td>
                         <td style="border:1px solid #4B586A;color:#4B586A;">2-2101 - Hutang Usaha</td>
                         <td style="border:1px solid #4B586A;color:#4B586A;">Debit</td>
-                        <td style="border:1px solid #4B586A;color:#4B586A;">187,425.00</td>
                     </tr>
                     <tr>
                         <td style="border:1px solid #4B586A;color:#4B586A;text-align:center;">5</td>
@@ -178,7 +173,50 @@
                         <td style="border:1px solid #4B586A;color:#4B586A;">25</td>
                         <td style="border:1px solid #4B586A;color:#4B586A;">1-1401 - Peralatan</td>
                         <td style="border:1px solid #4B586A;color:#4B586A;">Credit</td>
-                        <td style="border:1px solid #4B586A;color:#4B586A;">162,532.50</td>
+                    </tr>
+                </tbody>
+            </table>
+        <?php } else if ($dataHeader['type'] == 'Posting') { ?>
+            <table class="table table-head-fixed text-nowrap mb-0">
+                <thead>
+                    <tr>
+                        <th style="padding-top: 10px;padding-bottom: 10px;border:1px solid #e9ecef;text-align: center;background-color:#4B586A;color:white;">NO</th>
+                        <th style="padding-top: 10px;padding-bottom: 10px;border:1px solid #e9ecef;text-align: center;background-color:#4B586A;color:white;">TRANSACTION NUMBER</th>
+                        <th style="padding-top: 10px;padding-bottom: 10px;border:1px solid #e9ecef;text-align: center;background-color:#4B586A;color:white;">BUDGET</th>
+                        <th style="padding-top: 10px;padding-bottom: 10px;border:1px solid #e9ecef;text-align: center;background-color:#4B586A;color:white;">SUPPLIER</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    <tr>
+                        <td style="border:1px solid #4B586A;color:#4B586A;text-align:center;">1</td>
+                        <td style="border:1px solid #4B586A;color:#4B586A;">AP/QDC/2026/000021</td>
+                        <td style="border:1px solid #4B586A;color:#4B586A;">(Q000062) XL Microcell 2007</td>
+                        <td style="border:1px solid #4B586A;color:#4B586A;">VNDR-0008 - Duta Hita Jaya</td>
+                    </tr>
+                    <tr>
+                        <td style="border:1px solid #4B586A;color:#4B586A;text-align:center;">2</td>
+                        <td style="border:1px solid #4B586A;color:#4B586A;">AP/QDC/2026/000022</td>
+                        <td style="border:1px solid #4B586A;color:#4B586A;">(Q000062) XL Microcell 2007</td>
+                        <td style="border:1px solid #4B586A;color:#4B586A;">VNDR-0014 - Artha Jaya Mulya</td>
+                    </tr>
+                    <tr>
+                        <td style="border:1px solid #4B586A;color:#4B586A;text-align:center;">3</td>
+                        <td style="border:1px solid #4B586A;color:#4B586A;">AP/QDC/2026/000023</td>
+                        <td style="border:1px solid #4B586A;color:#4B586A;">(Q000062) XL Microcell 2007</td>
+                        <td style="border:1px solid #4B586A;color:#4B586A;">VNDR-0018 - Dinargeo Survey</td>
+                    </tr>
+                    <tr>
+                        <td style="border:1px solid #4B586A;color:#4B586A;text-align:center;">4</td>
+                        <td style="border:1px solid #4B586A;color:#4B586A;">AP/QDC/2026/000024</td>
+                        <td style="border:1px solid #4B586A;color:#4B586A;">(Q000062) XL Microcell 2007</td>
+                        <td style="border:1px solid #4B586A;color:#4B586A;">VNDR-0050 - Asuransi Perisai Listrik Nasional</td>
+                    </tr>
+                    <tr>
+                        <td style="border:1px solid #4B586A;color:#4B586A;text-align:center;">5</td>
+                        <td style="border:1px solid #4B586A;color:#4B586A;">AP/QDC/2026/000025</td>
+                        <td style="border:1px solid #4B586A;color:#4B586A;">(Q000062) XL Microcell 2007</td>
+                        <td style="border:1px solid #4B586A;color:#4B586A;">VNDR-0066 - Cakrawala Persada Internasional</td>
                     </tr>
                 </tbody>
             </table>
