@@ -31,7 +31,7 @@
         <div class="card">
           <form method="post" action="{{ route('SelectWorkFlow') }}" id="FormSubmitBusinessTrip">
             @csrf
-            <input hidden id="DocumentTypeID" name="DocumentTypeID">
+            <input hidden id="DocumentTypeID" name="DocumentTypeID" value="<?= $documentType_RefID; ?>">
             <input hidden id="var_combinedBudget_RefID" name="var_combinedBudget_RefID" />
             <input hidden id="combinedBudgetSectionDetail_RefID" name="combinedBudgetSectionDetail_RefID" />
             <input hidden id="budgetDetailsData" />

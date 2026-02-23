@@ -37,22 +37,16 @@ class BusinessTripRequestController extends Controller
     }
 
     public function index(Request $request)
-    {   
-        $varAPIWebToken = $request->session()->get('SessionLogin');
-        $request->session()->forget("SessionBusinessTripRequest");
+    {
+        $var                = $request->query('var', 0);
+        $varAPIWebToken     = Session::get('SessionLogin');
+        $documentTypeRefID  = $this->GetBusinessDocumentsTypeFromRedis('Person Business Trip Form');
 
-        $var = 0;
-        if(!empty($_GET['var'])){
-            $var =  $_GET['var'];
-        }
-        
-        $compact = [
-            'var' => $var,
-            'varAPIWebToken' => $varAPIWebToken,
-            'statusRevisi' => 0,
-        ];
-    
-        return view('Process.BusinessTrip.BusinessTripRequest.Transactions.CreateBusinessTripRequest', $compact);
+        return view('Process.BusinessTrip.BusinessTripRequest.Transactions.CreateBusinessTripRequest', [
+            'var'                   => $var,
+            'varAPIWebToken'        => $varAPIWebToken,
+            'documentType_RefID'    => $documentTypeRefID
+        ]);
     }
 
     public function store(Request $request)
