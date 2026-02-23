@@ -37,7 +37,7 @@ class GeneralJournalController extends Controller
 
         $compact =  [
             'varAPIWebToken' => $varAPIWebToken,
-            'type'           => 'SETTLEMENT' // SETTLEMENT OR ADJUSTMENT OR FIXED-ASSET
+            'type'           => 'POSTING' // SETTLEMENT OR ADJUSTMENT OR FIXED-ASSET OR POSTING
         ];
 
         return view('Accounting.GeneralJournal.Transactions.RevisionGeneralJournal', $compact);

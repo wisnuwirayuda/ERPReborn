@@ -291,20 +291,4 @@
 
         $('#myGetCategory').modal('hide');
     });
-
-    $('#tableAccountPayables').on('click', 'tbody tr', function() {
-        const sysId         = $(this).find('input[data-trigger="sys_id_modal_account_payable"]').val();
-        const trano         = $(this).find('td:nth-child(2)').text();
-        const budgetCode    = $(this).find('td:nth-child(3)').text();
-        const budgetName    = $(this).find('td:nth-child(4)').text();
-
-        $("#transaction_id_fixed_asset").val(sysId);
-        $("#transaction_number_fixed_asset").val(trano);
-        $(`#transaction_number_fixed_asset`).css({"background-color": "#e9ecef", "border": "1px solid #ced4da"});
-
-        getDetailJournalFixedAsset(sysId);
-        onClickGeneralJournalButton();
-
-        $('#myAccountPayables').modal('hide');
-    });
 </script>

@@ -121,6 +121,29 @@
                     </div>
                 </div>
 
+                <!-- DETAIL JOURNAL POSTING -->
+                <div class="tab-content detail-journal-posting px-3 pb-2" id="nav-tabContent" style="display: none;">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <!-- TITLE -->
+                                <div class="card-header">
+                                    <label class="card-title">
+                                        Posting
+                                    </label>
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                            <i class="fas fa-angle-down btn-sm" style="color:black;"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                @include('Accounting.GeneralJournal.Functions.Header.HeaderJournalPosting')
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- REMARK -->
                 <div class="tab-content px-3 pb-2 journal-remark" id="nav-tabContent" style="display: none;">
                     <div class="row">
@@ -171,6 +194,7 @@
     </section>
 </div>
 
+@include('Accounting.GeneralJournal.Functions.Footer.FooterJournalPosting')
 @include('Accounting.GeneralJournal.Functions.Footer.FooterJournalAdjustment')
 @include('Accounting.GeneralJournal.Functions.Footer.FooterJournalFixedAsset')
 @include('Accounting.GeneralJournal.Functions.Footer.FooterJournalSettlement')
