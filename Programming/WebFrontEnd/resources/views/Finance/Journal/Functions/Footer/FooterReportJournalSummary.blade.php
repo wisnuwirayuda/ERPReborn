@@ -1,18 +1,55 @@
 <script>
-    let isFromTo = false;
-    let data = [];
-    const startLimit = document.getElementById("start_limit");
-    const endLimit = document.getElementById("end_limit");
-    const totalData = document.getElementById("total_data");
-    let currentPage = 1;
-    let rowsPerPage = 10;
-    let filteredData = [...data];
-    let sortColumn = null;
-    let sortOrder = 'asc'; 
-    let totalPages = Math.ceil(data.length / rowsPerPage);
+    let isFromTo        = false;
+    let data            = [];
+    const startLimit    = document.getElementById("start_limit");
+    const endLimit      = document.getElementById("end_limit");
+    const totalData     = document.getElementById("total_data");
+    let currentPage     = 1;
+    let rowsPerPage     = 10;
+    let filteredData    = [...data];
+    let sortColumn      = null;
+    let sortOrder       = 'asc'; 
+    let totalPages      = Math.ceil(data.length / rowsPerPage);
 
     function pickBanksAccount(value) {
         isFromTo = value;
+    }
+
+    function resetForm() {
+        isFromTo        = false;
+        data            = [];
+        currentPage     = 1;
+        rowsPerPage     = 10;
+        filteredData    = [...data];
+        sortColumn      = null;
+        sortOrder       = 'asc';
+
+        $("#budget_name").css('background-color', '#fff');
+        $(`#budget_name`).val("");
+        $(`#budget_id`).val("");
+        $(`#budget_code`).val("");
+
+        $("#trans_type_name").css('background-color', '#fff');
+        $(`#trans_type_name`).val("");
+        $(`#trans_type_id`).val("");
+
+        $("#trano_name").css('background-color', '#fff');
+        $(`#trano_name`).val("");
+        $(`#trano_id`).val("");
+        $(`#trano_code`).val("");
+
+        $("#bank_name").css('background-color', '#fff');
+        $(`#bank_name`).val("");
+        $(`#bank_id`).val("");
+        $(`#bank_code`).val("");
+
+        $("#from_to_name").css('background-color', '#fff');
+        $(`#from_to_name`).val("");
+        $(`#from_to_id`).val("");
+        $(`#from_to_code`).val("");
+        
+        $("#journal_date_range").css('background-color', '#fff');
+        $(`#journal_date_range`).val("");
     }
 
     function getDataReport() {
@@ -334,19 +371,6 @@
         getSites(sysId);
 
         $('#myProjects').modal('toggle');
-    });
-
-    $('#tableSites').on('click', 'tbody tr', function() {
-        const sysId       = $(this).find('input[data-trigger="sys_id_site"]').val();
-        const siteCode    = $(this).find('td:nth-child(2)').text();
-        const siteName    = $(this).find('td:nth-child(3)').text();
-
-        $("#sub_budget_id").val(sysId);
-        $("#sub_budget_code").val(siteCode);
-        $("#sub_budget_name").val(`${siteCode} - ${siteName}`);
-        $("#sub_budget_name").css('background-color', '#e9ecef');
-
-        $('#mySites').modal('toggle');
     });
 
     $('#tableBanksAccount').on('click', 'tbody tr', function() {
