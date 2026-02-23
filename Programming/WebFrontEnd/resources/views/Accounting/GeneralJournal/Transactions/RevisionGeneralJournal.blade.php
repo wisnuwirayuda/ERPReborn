@@ -97,6 +97,29 @@
                             </div>
                         </div>
                     </div>
+                <?php } else if ($type === "POSTING") { ?>
+                    <!-- DETAIL JOURNAL POSTING -->
+                    <div class="tab-content detail-journal-fixed-asset px-3 pb-2" id="nav-tabContent">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <!-- TITLE -->
+                                    <div class="card-header">
+                                        <label class="card-title">
+                                            Detail Journal Posting
+                                        </label>
+                                        <div class="card-tools">
+                                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                                <i class="fas fa-angle-down btn-sm" style="color:black;"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    @include('Accounting.GeneralJournal.Functions.Header.HeaderRevisionJournalPosting')
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 <?php } else { ?>
                     <!-- DETAIL JOURNAL FIXED ASSET -->
                     <div class="tab-content detail-journal-fixed-asset px-3 pb-2" id="nav-tabContent">
