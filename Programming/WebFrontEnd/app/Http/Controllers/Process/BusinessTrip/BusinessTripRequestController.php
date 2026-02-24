@@ -173,6 +173,7 @@ class BusinessTripRequestController extends Controller
         try {
             $varAPIWebToken             = Session::get('SessionLogin');
             $personBusinessTripRefID    = $request->input('brf_number_id');
+            $documentTypeRefID          = $this->GetBusinessDocumentsTypeFromRedis('Person Business Trip Revision Form');
 
             $responseTripSequence = $this->businessTripService->getPersonBusinessTripSequence($personBusinessTripRefID);
 
@@ -191,6 +192,7 @@ class BusinessTripRequestController extends Controller
 
             $compact = [
                 'varAPIWebToken'                    => $varAPIWebToken ?? '',
+                'documentType_RefID'                => $documentTypeRefID,
                 'combinedBudgetSectionDetail_RefID' => 169000000000048,
                 'personBusinessTripRefID'           => $dataTripSequence[0]['personBusinessTrip_RefID'],
                 'personBusinessTripDetailRefID'     => $dataTripSequence[0]['sys_ID'],
