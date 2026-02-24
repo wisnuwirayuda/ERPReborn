@@ -395,7 +395,7 @@
                                                             businessDocument_RefID: 74000000027381, // parseInt(refNumberRefID.value)
                                                             log_FileUpload_Pointer_RefID: null,
                                                             combinedBudget_RefID: 46000000000033,
-                                                            beneficiaryBankAccount_RefID: 167000000000001,
+                                                            beneficiaryBankAccount_RefID: parseInt(sourceRefID.value),
                                                             chartOfAccount_RefID: parseInt(chartOfAccountRefID.value),
                                                             amountCurrency_RefID: parseInt(amountCurrencyRefID.value),
                                                             amountCurrencyValue: parseFloat(paymentInput.value.replace(/,/g, '')),
@@ -508,7 +508,7 @@
                                                     businessDocument_RefID: 74000000027381, // parseInt(refNumberRefID.value)
                                                     log_FileUpload_Pointer_RefID: null,
                                                     combinedBudget_RefID: 46000000000033,
-                                                    beneficiaryBankAccount_RefID: 167000000000001,
+                                                    beneficiaryBankAccount_RefID: parseInt(sourceRefID.value),
                                                     chartOfAccount_RefID: parseInt(chartOfAccountRefID.value),
                                                     amountCurrency_RefID: parseInt(amountCurrencyRefID.value),
                                                     amountCurrencyValue: parseFloat(paymentInput.value.replace(/,/g, '')),
@@ -726,7 +726,9 @@
                     //     cancelForm("{{ route('Journal.index', ['var' => 1]) }}");
                     // });
 
-                    $('#journal_success_title').text(`Successful ! Data has been saved. Your transaction number is ${res.documentJournalNumber}`);
+                    // $('#journal_success_title').text(`Successful ! Data has been saved. Your transaction number is ${res.documentJournalNumber}`);
+
+                    $('#journal_success_title').html(`Successful ! Data has been saved. Your transaction number is <span style="color:#0046FF;">${res.documentJournalNumber}</span>`);
 
                     $('#journal_success_table').DataTable({
                         destroy: true,

@@ -1137,7 +1137,7 @@
     $("#bank_list_popup_second").prop("disabled", true);
     $("#bank_accounts_third_popup").prop("disabled", true);
 
-    getDocumentType("Person Business Trip Form");
+    // getDocumentType("Person Business Trip Form");
     getBusinessTripCostComponentEntityNew();
   });
 </script>

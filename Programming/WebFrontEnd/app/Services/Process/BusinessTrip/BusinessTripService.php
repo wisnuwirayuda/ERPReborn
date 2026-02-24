@@ -9,8 +9,6 @@ use App\Helpers\ZhtHelper\System\Helper_Environment;
 
 class BusinessTripService
 {
-    protected $advanceSettlementService, $workflowService;
-
     public function dataPickList()
     {
         $sessionToken = Session::get('SessionLogin');

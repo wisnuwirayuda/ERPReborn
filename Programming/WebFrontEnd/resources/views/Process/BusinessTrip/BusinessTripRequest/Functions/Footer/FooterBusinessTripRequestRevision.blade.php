@@ -1035,7 +1035,7 @@
 
   $(window).one('load', function(e) {
     getBudgetDetails(siteCode.value, combinedBudgetSectionDetailRefID.value);
-    getDocumentType("Person Business Trip Revision Form");
+    // getDocumentType("Person Business Trip Revision Form");
     getBusinessTripCostComponentEntityNew();
   });
 </script>

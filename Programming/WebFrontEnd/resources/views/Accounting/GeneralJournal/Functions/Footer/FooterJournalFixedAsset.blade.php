@@ -204,7 +204,7 @@
                                         ${val.productCode || ''} - ${val.productName || ''}
                                     </td>
                                     <td style="text-align: center;">
-                                        ${val.productUnitPriceCurrencyValue || ''}
+                                        ${currencyTotal(val.productUnitPriceCurrencyValue || 0)}
                                     </td>
                                     <td style="text-align: center;">
                                         <div class="input-group">
@@ -247,18 +247,19 @@
                                             <input id="coaName${key}" style="border-radius:0;width:130px;background-color:white;" class="form-control" readonly />
                                         </div>
                                     </td>
-                                    <td style="text-align: center;">
+                                    <td style="text-align: center;padding-right: .3rem;">
                                         <select class="form-control" id="coaStatus${key}">
                                             <option value="" disabled selected>Select a ...</option>
                                             <option value="214000000000001">Debit</option>
                                             <option value="214000000000001">Credit</option>
                                         </select>
                                     </td>
-                                    <td style="text-align: center;padding-right: .3rem;">
-                                        <input id="value${key}" class="form-control number-without-negative" data-index='' autocomplete="off" readonly style="border-radius:0px;" />
-                                    </td>
                                 </tr>
                             `;
+
+                            // <td style="text-align: center;padding-right: .3rem;">
+                            //     <input id="value${key}" class="form-control number-without-negative" data-index='' autocomplete="off" readonly style="border-radius:0px;" />
+                            // </td>
 
                             // <input id="depreciationYears${key}" class="form-control number-without-negative" style="border-radius:0px;" readonly />
                             // <input id="depreciationRate${key}" class="form-control number-without-negative" style="border-radius:0px;" readonly />
@@ -289,21 +290,5 @@
         getDepreciationRateYears(sysId, selectMethod.value, currentIndexPickDepreciationCategory);
 
         $('#myGetCategory').modal('hide');
-    });
-
-    $('#tableAccountPayables').on('click', 'tbody tr', function() {
-        const sysId         = $(this).find('input[data-trigger="sys_id_modal_account_payable"]').val();
-        const trano         = $(this).find('td:nth-child(2)').text();
-        const budgetCode    = $(this).find('td:nth-child(3)').text();
-        const budgetName    = $(this).find('td:nth-child(4)').text();
-
-        $("#transaction_id_fixed_asset").val(sysId);
-        $("#transaction_number_fixed_asset").val(trano);
-        $(`#transaction_number_fixed_asset`).css({"background-color": "#e9ecef", "border": "1px solid #ced4da"});
-
-        getDetailJournalFixedAsset(sysId);
-        onClickGeneralJournalButton();
-
-        $('#myAccountPayables').modal('hide');
     });
 </script>

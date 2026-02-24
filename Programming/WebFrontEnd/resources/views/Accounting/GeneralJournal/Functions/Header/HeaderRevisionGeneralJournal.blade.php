@@ -21,7 +21,7 @@
                 <div class="col-sm-9 col-md-8 col-lg-7 d-flex p-0">
                     <div>
                         <div class="input-group">
-                            <input id="journal_type" class="form-control" readonly style="border-radius:0; cursor: default;" />
+                            <input id="journal_type" class="form-control" readonly style="border-radius:0; cursor: default;" value="<?= $type; ?>" />
                         </div>
                     </div>
                 </div>
