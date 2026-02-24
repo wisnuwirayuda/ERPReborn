@@ -726,7 +726,9 @@
                     //     cancelForm("{{ route('Journal.index', ['var' => 1]) }}");
                     // });
 
-                    $('#journal_success_title').text(`Successful ! Data has been saved. Your transaction number is ${res.documentJournalNumber}`);
+                    // $('#journal_success_title').text(`Successful ! Data has been saved. Your transaction number is ${res.documentJournalNumber}`);
+
+                    $('#journal_success_title').html(`Successful ! Data has been saved. Your transaction number is <span style="color:#0046FF;">${res.documentJournalNumber}</span>`);
 
                     $('#journal_success_table').DataTable({
                         destroy: true,
