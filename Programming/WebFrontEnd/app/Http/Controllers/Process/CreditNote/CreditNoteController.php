@@ -78,134 +78,124 @@ class CreditNoteController extends Controller
 
     public function ReportCreditNoteSummary(Request $request)
     {
-        $varAPIWebToken = $request->session()->get('SessionLogin');
-        $request->session()->forget("SessionPurchaseRequisitionNumber");
-        $dataCN = Session::get("CreditNoteReportSummaryDataPDF");
-
-        if (!empty($_GET['var'])) {
-            $var =  $_GET['var'];
-        }
-        $compact = [
-            'varAPIWebToken' => $varAPIWebToken,
-            'statusRevisi' => 1,
-            'statusHeader' => "Yes",
-            'statusDetail' => 1,
-            'dataHeader' => [],
-            'dataCN' => $dataCN
-        
-        ];
-        // dump($dataCN);
-
-        return view('Process.CreditNote.Reports.ReportCreditNoteSummary', $compact);
-    }
-
-    public function ReportCreditNoteSummaryData($project_code, $site_code, $start_date = null, $end_date = null)
-    {
-        try {
-            $varAPIWebToken = Session::get('SessionLogin');
-
-            // default date range kalau kosong
-            if (empty($start_date) && empty($end_date)) {
-                $start_date = now()->startOfMonth()->format('Y-m-d') . ' 00:00:00+07';
-                $end_date   = now()->endOfMonth()->format('Y-m-d') . ' 23:59:59+07';
-            }   
-
-            $params = [
-                'parameter' => [
-                    'CombinedBudgetCode' => $project_code,
-                    'CombinedBudgetSectionCode' => $site_code,
-                ],
-                'SQLStatement' => [
-                    'pick' => null,
-                    'sort' => null,
-                    'filter' => [],
-                    'paging' => null
-                ]
-            ];
-
-            // filter by date range
-            if (!empty($start_date) && !empty($end_date)) {
-                $params['SQLStatement']['filter'][] = [
-                    'condition' => 'Between',
-                    'field' => 'date',
-                    'value' => [
-                        'from' => \Carbon\Carbon::parse($start_date)->format('Y-m-d') . ' 00:00:00+07',
-                        'to'   => \Carbon\Carbon::parse($end_date)->format('Y-m-d') . ' 23:59:59+07',
-                    ],
-                ];
-            }
-            Log::info("Filter Date Payload", [
-                'from' => $start_date,
-                'to'   => $end_date
-            ]);
-            Log::info("Params send to API", $params);
-
-            $filteredArray = Helper_APICall::setCallAPIGateway(
-                Helper_Environment::getUserSessionID_System(),
-                $varAPIWebToken, 
-                'report.form.documentForm.finance.getCreditNoteSummary', 
-                'latest',
-                $params
-            );
-
-            if ($filteredArray['metadata']['HTTPStatusCode'] !== 200) {
-                return redirect()->back()->with('NotFound', 'Process Error');
-            }
-            Log::info("Keys:", array_keys($filteredArray['data']['data'][0]));
-
-            Session::put("CreditNoteReportSummaryDataPDF", $filteredArray['data']['data']);
-            Session::put("CreditNoteReportSummaryDataExcel", $filteredArray['data']['data']);
-            return $filteredArray['data']['data'];
-
-        } catch (\Throwable $th) {
-            Log::error("Error at " . $th->getMessage());
-        }
+        return view('Process.CreditNote.Reports.ReportCreditNoteSummary');
     }
 
     public function ReportCreditNoteSummaryStore(Request $request)
     {
         try {
-            $project_code = $request->project_code_second;
-            $site_code = $request->site_code_second;
-            $start_date = $request->start_date;
-            $end_date = $request->end_date;
+            $date           = $request->cnDate;
+            $budget         = [
+                "id"        => $request->budget_id,
+                "code"      => $request->budget_code,
+            ];
+            $subBudget      = [
+                "id"        => $request->site_id,
+                "code"      => $request->site_code,
+            ];
+            $customerID     = $request->customer_id;
 
-            // convert ke format Y-m-d H:i:s+07
-            if (!empty($start_date)) {
-                $start_date = \Carbon\Carbon::parse($start_date)->format('Y-m-d 00:00:00+07');
-            }
-            if (!empty($end_date)) {
-                $end_date = \Carbon\Carbon::parse($end_date)->format('Y-m-d 23:59:59+07');
-            }
+            $response = $this->creditNoteService->getCreditNoteSummary(
+                $budget['code'], 
+                $subBudget['code'],
+                $date,
+                $customerID
+            );
 
-
-            Session::put('ReportCreditNoteSummaryFilter', [
-                'project_code' => $project_code,
-                'site_code' => $site_code,
-                'start_date' => $start_date,
-                'end_date' => $end_date,
-            ]);
-
-            Log::info("Filter params: ", [
-                'project_code' => $project_code,
-                'site_code' => $site_code,
-                'start_date' => $start_date,
-                'end_date' => $end_date,
-            ]);
-
-            if ($project_code == "" && $site_code == "" && $start_date == "" && $end_date == "") {
-                Session::forget("CreditNoteReportSummaryDataPDF");
-                Session::forget("CreditNoteReportSummaryDataExcel");
-                
-                return redirect()->route('CreditNote.ReportCreditNoteSummary')->with('NotFound', 'Cannot Empty');
+            if ($response['metadata']['HTTPStatusCode'] !== 200) {
+                throw new \Exception('Failed to fetch Credit Note Summary Report');
             }
 
-            $compact = $this->ReportCreditNoteSummaryData($project_code, $site_code, $start_date, $end_date);
+            $compact = [
+                'status'    => $response['metadata']['HTTPStatusCode'],
+                'data'      => $response['data']['data']
+            ];
 
-            return redirect()->route('CreditNote.ReportCreditNoteSummary');
+            return response()->json($compact);
         } catch (\Throwable $th) {
-            Log::error("Error at " . $th->getMessage());
+            Log::error("Report Credit Note Summary Store Function Error:" . $th->getMessage());
+            
+            $compact = [
+                'status'    => 500,
+                'message'   => $th->getMessage()
+            ];
+
+            return response()->json($compact);
         }
+    }
+
+    public function PrintExportReportCreditNoteSummary(Request $request)
+    {
+        try {
+            $type                   = $request->printType;
+            $budgetName             = $request->budgetName;
+            $subBudgetName          = $request->subBudgetName;
+            $customerName           = $request->customerName;
+            $cnDate                 = $request->cnDate;
+            $dataCreditNoteSummary  = json_decode($request->dataReport, true);
+
+            if ($dataCreditNoteSummary) {
+                if ($type === "PDF") {
+                    $pdf = PDF::loadView('Process.CreditNote.Reports.ReportCreditNoteSummary_pdf', [
+                        'dataCN'        => $dataCreditNoteSummary, 
+                        'budgetName'    => $budgetName,
+                        'subBudgetName' => $subBudgetName,
+                        'customerName'  => $customerName,
+                        'cnDate'        => $cnDate
+                        ])->setPaper('a4', 'landscape');
+
+                    $pdf->output();
+                    $dom_pdf    = $pdf->getDomPDF();
+                    $canvas     = $dom_pdf ->get_canvas();
+                    $width      = $canvas->get_width();
+                    $height     = $canvas->get_height();
+                    $canvas->page_text($width - 88, $height - 35, "Page {PAGE_NUM} of {PAGE_COUNT}", null, 10, array(0, 0, 0));
+                    $canvas->page_text(34, $height - 35, "Print by " . $request->session()->get("SessionLoginName"), null, 10, array(0, 0, 0));
+
+                    return $pdf->download('Export Report Credit Note Summary.pdf');
+                } else if ($type === "EXCEL") {
+                } else {
+                    throw new \Exception('Failed to Export Credit Note Summary Report');
+                }
+            } else {
+                throw new \Exception('Credit Note Summary Data is Empty');
+            }
+        } catch (\Throwable $th) {
+            Log::error("Print Export Report Credit Note Summary Function Error: " . $th->getMessage());
+
+            return response()->json(['statusCode' => 400]);
+        }
+
+        // try {
+        //     $dataPDF = Session::get("CreditNoteReportSummaryDataPDF");
+        //     $dataExcel = Session::get("CreditNoteReportSummaryDataExcel");
+            
+        //     if ($dataPDF && $dataExcel) {
+        //         $print_type = $request->print_type;
+        //         if ($print_type == "PDF") {
+        //             $dataCN = Session::get("CreditNoteReportSummaryDataPDF");
+
+        //             $pdf = PDF::loadView('Process.CreditNote.Reports.ReportCreditNoteSummary_pdf', ['dataCN' => $dataCN])->setPaper('a4', 'landscape');
+        //             $pdf->output();
+        //             $dom_pdf = $pdf->getDomPDF();
+
+        //             $canvas = $dom_pdf ->get_canvas();
+        //             $width = $canvas->get_width();
+        //             $height = $canvas->get_height();
+        //             $canvas->page_text($width - 88, $height - 35, "Page {PAGE_NUM} of {PAGE_COUNT}", null, 10, array(0, 0, 0));
+        //             $canvas->page_text(34, $height - 35, "Print by " . $request->session()->get("SessionLoginName"), null, 10, array(0, 0, 0));
+
+        //             return $pdf->download('Export Report Credit Note Summary.pdf');
+        //         } else if ($print_type == "Excel") {
+        //             return Excel::download(new ExportReportCreditNoteSummary, 'Export Report Credit Note Summary.xlsx');
+        //         }
+        //     } else {
+        //         return redirect()->route('CreditNote.ReportCreditNoteSummary')->with('NotFound', 'Data Cannot Empty');
+        //     }
+        // } catch (\Throwable $th) {
+        //     Log::error("Error at " . $th->getMessage());
+        //     return redirect()->back()->with('NotFound', 'Process Error');
+        // }
     }
 
     public function RevisionCreditNote(Request $request) 
@@ -237,40 +227,6 @@ class CreditNoteController extends Controller
             return view('Process.CreditNote.Transactions.RevisionCreditNote', $compact);
         } catch (\Throwable $th) {
             Log::error("Revision Credit Note Function Error: " . $th->getMessage());
-            return redirect()->back()->with('NotFound', 'Process Error');
-        }
-    }
-
-    public function PrintExportReportCreditNoteSummary(Request $request)
-    {
-        try {
-            $dataPDF = Session::get("CreditNoteReportSummaryDataPDF");
-            $dataExcel = Session::get("CreditNoteReportSummaryDataExcel");
-            
-            if ($dataPDF && $dataExcel) {
-                $print_type = $request->print_type;
-                if ($print_type == "PDF") {
-                    $dataCN = Session::get("CreditNoteReportSummaryDataPDF");
-
-                    $pdf = PDF::loadView('Process.CreditNote.Reports.ReportCreditNoteSummary_pdf', ['dataCN' => $dataCN])->setPaper('a4', 'landscape');
-                    $pdf->output();
-                    $dom_pdf = $pdf->getDomPDF();
-
-                    $canvas = $dom_pdf ->get_canvas();
-                    $width = $canvas->get_width();
-                    $height = $canvas->get_height();
-                    $canvas->page_text($width - 88, $height - 35, "Page {PAGE_NUM} of {PAGE_COUNT}", null, 10, array(0, 0, 0));
-                    $canvas->page_text(34, $height - 35, "Print by " . $request->session()->get("SessionLoginName"), null, 10, array(0, 0, 0));
-
-                    return $pdf->download('Export Report Credit Note Summary.pdf');
-                } else if ($print_type == "Excel") {
-                    return Excel::download(new ExportReportCreditNoteSummary, 'Export Report Credit Note Summary.xlsx');
-                }
-            } else {
-                return redirect()->route('CreditNote.ReportCreditNoteSummary')->with('NotFound', 'Data Cannot Empty');
-            }
-        } catch (\Throwable $th) {
-            Log::error("Error at " . $th->getMessage());
             return redirect()->back()->with('NotFound', 'Process Error');
         }
     }
