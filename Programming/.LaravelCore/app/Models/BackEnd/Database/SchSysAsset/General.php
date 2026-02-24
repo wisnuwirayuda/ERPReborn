@@ -151,6 +151,50 @@ namespace App\Models\Database\SchSysAsset
 
         /*
         +--------------------------------------------------------------------------------------------------------------------------+
+        | ▪ Method Name     : getData_WorkFlow_IsUserAllowed                                                                       |
+        +--------------------------------------------------------------------------------------------------------------------------+
+        | ▪ Version         : 1.0000.0000000                                                                                       |
+        | ▪ Last Update     : 2026-02-24                                                                                           |
+        | ▪ Creation Date   : 2026-02-24                                                                                           |
+        | ▪ Description     : Mendapatkan Status Hak Akses Workflow dari User                                                      |
+        +--------------------------------------------------------------------------------------------------------------------------+
+        | ▪ Input Variable  :                                                                                                      |
+        |      ▪ (mixed)   varUserSession ► User Session                                                                           |
+        |      ▪ (int)     varAPIWebToken ► API Web Token                                                                          |
+        | ▪ Output Variable :                                                                                                      |
+        |      ▪ (boolean) varReturn                                                                                               | 
+        +--------------------------------------------------------------------------------------------------------------------------+
+        */
+        public function getData_WorkFlow_IsUserAllowed(
+            $varUserSession,
+            int $varBranchRefID, int $varUserRefID, int $varBusinessDocumentTypeRefID, int $varCombinedBudgetRefID,
+            string $varMode = null)
+            {
+            $varReturn = 
+                \App\Helpers\ZhtHelper\Database\Helper_PostgreSQL::getQueryExecution(
+                    $varUserSession, 
+                    \App\Helpers\ZhtHelper\Database\Helper_PostgreSQL::getBuildStringLiteral_StoredProcedure(
+                        $varUserSession,
+                        'SchSysAsset.Func_GetData_WorkFlow_IsUserAllowed',
+                        [
+                            [$varBranchRefID, 'bigint'],
+                            [$varUserRefID, 'bigint'],
+                            [$varBusinessDocumentTypeRefID, 'bigint'],
+                            [$varCombinedBudgetRefID, 'bigint'],
+                            [$varMode, 'varchar']
+                        ]
+                        )
+                    );
+
+            return
+                [
+                'SignAllowed' => (boolean) $varReturn['data'][0]['Func_GetData_WorkFlow_IsUserAllowed']                
+                ];
+            }
+
+
+        /*
+        +--------------------------------------------------------------------------------------------------------------------------+
         | ▪ Method Name     : isRecordDeleted                                                                                      |
         +--------------------------------------------------------------------------------------------------------------------------+
         | ▪ Version         : 1.0000.0000000                                                                                       |
