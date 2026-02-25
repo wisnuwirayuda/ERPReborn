@@ -246,6 +246,7 @@ class ReimbursementController extends Controller
 
                     return $pdf->download('Export Report Reimbursement Summary.pdf');
                 } else if ($type === "EXCEL") {
+                    return Excel::download(new ExportReportReimbursementSummary($dataReimbursementSummary), 'Export Report Reimbursement Summary.xlsx');
                 } else {
                     throw new \Exception('Failed to Export Reimbursement Summary Report');
                 }
@@ -257,39 +258,6 @@ class ReimbursementController extends Controller
             Log::error("Print Export Report Reimbursement Summary Function Error: " . $th->getMessage());
 
             return response()->json(['statusCode' => 400]);
-        }
-
-        try {
-            $dataPDF = Session::get("ReimbursementReportSummaryDataPDF");
-            $dataExcel = Session::get("ReimbursementReportSummaryDataExcel");
-
-            
-            if ($dataPDF && $dataExcel) {
-                $print_type = $request->print_type;
-                if ($print_type == "PDF") {
-                    $dataRem = Session::get("ReimbursementReportSummaryDataPDF");
-                    // dd($dataRem);
-
-                    $pdf = PDF::loadView('Process.Reimbursement.Reports.ReportReimbursementSummary_pdf', ['dataRem' => $dataRem])->setPaper('a4', 'landscape');
-                    $pdf->output();
-                    $dom_pdf = $pdf->getDomPDF();
-
-                    $canvas = $dom_pdf ->get_canvas();
-                    $width = $canvas->get_width();
-                    $height = $canvas->get_height();
-                    $canvas->page_text($width - 88, $height - 35, "Page {PAGE_NUM} of {PAGE_COUNT}", null, 10, array(0, 0, 0));
-                    $canvas->page_text(34, $height - 35, "Print by " . $request->session()->get("SessionLoginName"), null, 10, array(0, 0, 0));
-
-                    return $pdf->download('Export Report Reimbursement Summary.pdf');
-                } else if ($print_type == "Excel") {
-                    return Excel::download(new ExportReportReimbursementSummary, 'Export Report Reimbursement Summary.xlsx');
-                }
-            } else {
-                return redirect()->route('Reimbursement.ReimbursementSummary')->with('NotFound', 'Data Cannot Empty');
-            }
-        } catch (\Throwable $th) {
-            Log::error("Error at " . $th->getMessage());
-            return redirect()->back()->with('NotFound', 'Process Error');
         }
     }
 }
