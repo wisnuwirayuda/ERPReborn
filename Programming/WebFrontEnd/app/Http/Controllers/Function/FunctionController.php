@@ -1827,7 +1827,9 @@ class FunctionController extends Controller
                     'transaction.read.dataList.master.getBusinessDocumentType',
                     'latest',
                     [
-                        'parameter'     => [],
+                        'parameter'     => [
+                            'statusPayment' => NULL,
+                        ],
                         'SQLStatement'  => [
                             'pick'      => null,
                             'sort'      => null,
