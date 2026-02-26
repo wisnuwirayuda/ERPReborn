@@ -70,13 +70,7 @@
                                                     </th>
                                                     <th style="padding-top: 10px;padding-bottom: 10px;border:1px solid #e9ecef;text-align: center;background-color:#4B586A;color:white;">
                                                         <div style="cursor: pointer; display: flex;justify-content: center;align-items: center;gap: 12.7px;">
-                                                            <div>Date</div>
-                                                            <i class="fas fa-solid fa-sort"></i>
-                                                        </div>
-                                                    </th>
-                                                    <th style="padding-top: 10px;padding-bottom: 10px;border:1px solid #e9ecef;text-align: center;background-color:#4B586A;color:white;">
-                                                        <div style="cursor: pointer; display: flex;justify-content: center;align-items: center;gap: 12.7px;">
-                                                            <div>DB/CR</div>
+                                                            <div>Transaction Date</div>
                                                             <i class="fas fa-solid fa-sort"></i>
                                                         </div>
                                                     </th>
@@ -94,7 +88,19 @@
                                                     </th>
                                                     <th style="padding-top: 10px;padding-bottom: 10px;border:1px solid #e9ecef;text-align: center;background-color:#4B586A;color:white;">
                                                         <div style="cursor: pointer; display: flex;justify-content: center;align-items: center;gap: 12.7px;">
-                                                            <div>Payment Value</div>
+                                                            <div>DB/CR</div>
+                                                            <i class="fas fa-solid fa-sort"></i>
+                                                        </div>
+                                                    </th>
+                                                    <th style="padding-top: 10px;padding-bottom: 10px;border:1px solid #e9ecef;text-align: center;background-color:#4B586A;color:white;">
+                                                        <div style="cursor: pointer; display: flex;justify-content: center;align-items: center;gap: 12.7px;">
+                                                            <div>Payment/Received Date</div>
+                                                            <i class="fas fa-solid fa-sort"></i>
+                                                        </div>
+                                                    </th>
+                                                    <th style="padding-top: 10px;padding-bottom: 10px;border:1px solid #e9ecef;text-align: center;background-color:#4B586A;color:white;">
+                                                        <div style="cursor: pointer; display: flex;justify-content: center;align-items: center;gap: 12.7px;">
+                                                            <div>Payment/Received Value</div>
                                                             <i class="fas fa-solid fa-sort"></i>
                                                         </div>
                                                     </th>

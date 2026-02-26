@@ -166,6 +166,10 @@
             attachmentCell.textContent = item.attachment;
             row.appendChild(attachmentCell);
 
+            const testingCell = document.createElement('td');
+            testingCell.textContent = item.testing;
+            row.appendChild(testingCell);
+
             tbody.appendChild(row);
             rowIndex++;
         });
@@ -220,7 +224,8 @@
             "balance": "",
             "from_to": "",
             "coa_code": "",
-            "attachment": ""
+            "attachment": "",
+            "testing": "",
         }];
 
         startLimit.textContent = start + 1;

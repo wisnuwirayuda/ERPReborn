@@ -36,7 +36,7 @@
                                 <!-- TITLE -->
                                 <div class="card-header">
                                     <label class="card-title">
-                                        Journal
+                                        Cash & Bank
                                     </label>
                                     <div class="card-tools">
                                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -59,7 +59,7 @@
                                 <!-- HEADER -->
                                 <div class="card-header">
                                     <label class="card-title">
-                                        Detail Journal
+                                        Detail Cash & Bank
                                     </label>
                                     <div class="card-tools">
                                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -107,7 +107,7 @@
                 <tr>
                     <th>No</th>
                     <th>Reference Number</th>
-                    <th>Cash & Bank Number</th>
+                    <th>Journal Number</th>
                 </tr>
             </thead>
             <tbody></tbody>
