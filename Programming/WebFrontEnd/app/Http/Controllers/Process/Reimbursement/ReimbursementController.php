@@ -99,8 +99,9 @@ class ReimbursementController extends Controller
     public function RevisionReimbursement(Request $request)
     {
         try {
-            $varAPIWebToken = $request->session()->get('SessionLogin');
-            $response       = $this->reimbursementService->getDetail($request->modal_reimbursement_id);
+            $varAPIWebToken     = $request->session()->get('SessionLogin');
+            $response           = $this->reimbursementService->getDetail($request->modal_reimbursement_id);
+            $documentTypeRefID  = $this->GetBusinessDocumentsTypeFromRedis('Reimbursement Revision Form');
 
             if ($response['metadata']['HTTPStatusCode'] !== 200) {
                 throw new \Exception('Failed to fetch Detail Reimbursement');
@@ -110,6 +111,7 @@ class ReimbursementController extends Controller
 
             $compact = [
                 'varAPIWebToken'    => $varAPIWebToken,
+                'documentTypeRefID' => $documentTypeRefID,
                 'header'            => [
                     'sys_RefID'                     => $data[0]['Sys_ID_Header'] ?? '',
                     'combinedBudget_RefID'          => $data[0]['CombinedBudget_RefID'] ?? '',
