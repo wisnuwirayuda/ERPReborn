@@ -165,92 +165,51 @@ class DebitNoteController extends Controller
 
     public function ReportDebitNoteSummary(Request $request)
     {
-        $varAPIWebToken = $request->session()->get('SessionLogin');
-        $request->session()->forget("SessionPurchaseRequisitionNumber");
-        $dataDN = Session::get("DebitNoteReportSummaryDataPDF");
-
-        if (!empty($_GET['var'])) {
-            $var =  $_GET['var'];
-        }
-        $compact = [
-            'varAPIWebToken' => $varAPIWebToken,
-            'statusRevisi' => 1,
-            'statusHeader' => "Yes",
-            'statusDetail' => 1,
-            'dataHeader' => [],
-            'dataDN' => $dataDN
-        
-        ];
-        // dump($dataDN);
-
-        return view('Process.DebitNote.Reports.ReportDebitNoteSummary', $compact);
-    }
-
-    public function ReportDebitNoteSummaryData($project_code, $site_code, $start_date = null, $end_date = null)
-    {
-        try {
-            $varAPIWebToken = Session::get('SessionLogin');
-
-            // default date range kalau kosong
-            if (empty($start_date) && empty($end_date)) {
-                $start_date = now()->startOfMonth()->format('Y-m-d') . ' 00:00:00+07';
-                $end_date   = now()->endOfMonth()->format('Y-m-d') . ' 23:59:59+07';
-            }   
-
-            $params = [
-                'parameter' => [
-                    'CombinedBudgetCode' => $project_code,
-                    'CombinedBudgetSectionCode' => $site_code,
-                ],
-                'SQLStatement' => [
-                    'pick' => null,
-                    'sort' => null,
-                    'filter' => [],
-                    'paging' => null
-                ]
-            ];
-
-            // filter by date range
-            if (!empty($start_date) && !empty($end_date)) {
-                $params['SQLStatement']['filter'][] = [
-                    'condition' => 'Between',
-                    'field' => 'date',
-                    'value' => [
-                        'from' => \Carbon\Carbon::parse($start_date)->format('Y-m-d') . ' 00:00:00+07',
-                        'to'   => \Carbon\Carbon::parse($end_date)->format('Y-m-d') . ' 23:59:59+07',
-                    ],
-                ];
-            }
-            // Log::info("Filter Date Payload", [
-            //     'from' => $start_date,
-            //     'to'   => $end_date
-            // ]);
-            // Log::info("Params send to API", $params);
-
-            $filteredArray = Helper_APICall::setCallAPIGateway(
-                Helper_Environment::getUserSessionID_System(),
-                $varAPIWebToken, 
-                'report.form.documentForm.finance.getDebitNoteSummary', 
-                'latest',
-                $params
-            );
-
-            if ($filteredArray['metadata']['HTTPStatusCode'] !== 200) {
-                return redirect()->back()->with('NotFound', 'Process Error');
-            }
-            // Log::info("Keys:", array_keys($filteredArray['data']['data'][0]));
-
-            Session::put("DebitNoteReportSummaryDataPDF", $filteredArray['data']['data']);
-            Session::put("DebitNoteReportSummaryDataExcel", $filteredArray['data']['data']);
-            return $filteredArray['data']['data'];
-
-        } catch (\Throwable $th) {
-            Log::error("Error at " . $th->getMessage());
-        }
+        return view('Process.DebitNote.Reports.ReportDebitNoteSummary');
     }
 
     public function ReportDebitNoteSummaryStore(Request $request)
     {
+        try {
+            $date           = $request->dnDate;
+            $budget         = [
+                "id"        => $request->budget_id,
+                "code"      => $request->budget_code,
+            ];
+            $subBudget      = [
+                "id"        => $request->sub_budget_id,
+                "code"      => $request->sub_budget_code,
+            ];
+            $customerID     = $request->customer_id;
+
+            $response = $this->debitNoteService->getDebitNoteSummary(
+                $budget['code'], 
+                $subBudget['code'], 
+                $date,
+                $customerID
+            );
+
+            if ($response['metadata']['HTTPStatusCode'] !== 200) {
+                throw new \Exception('Failed to fetch Reimbursement Summary Report');
+            }
+
+            $compact = [
+                'status'    => $response['metadata']['HTTPStatusCode'],
+                'data'      => $response['data']['data']
+            ];
+
+            return response()->json($compact);
+        } catch (\Throwable $th) {
+            Log::error("Report Debit Note Summary Store Function Error:" . $th->getMessage());
+            
+            $compact = [
+                'status'    => 500,
+                'message'   => $th->getMessage()
+            ];
+
+            return response()->json($compact);
+        }
+
         try {
             $project_code = $request->project_code_second;
             $site_code = $request->site_code_second;
