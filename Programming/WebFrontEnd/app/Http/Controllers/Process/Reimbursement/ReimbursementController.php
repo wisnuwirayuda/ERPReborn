@@ -99,8 +99,9 @@ class ReimbursementController extends Controller
     public function RevisionReimbursement(Request $request)
     {
         try {
-            $varAPIWebToken = $request->session()->get('SessionLogin');
-            $response       = $this->reimbursementService->getDetail($request->modal_reimbursement_id);
+            $varAPIWebToken     = $request->session()->get('SessionLogin');
+            $response           = $this->reimbursementService->getDetail($request->modal_reimbursement_id);
+            $documentTypeRefID  = $this->GetBusinessDocumentsTypeFromRedis('Reimbursement Revision Form');
 
             if ($response['metadata']['HTTPStatusCode'] !== 200) {
                 throw new \Exception('Failed to fetch Detail Reimbursement');
@@ -110,6 +111,7 @@ class ReimbursementController extends Controller
 
             $compact = [
                 'varAPIWebToken'    => $varAPIWebToken,
+                'documentTypeRefID' => $documentTypeRefID,
                 'header'            => [
                     'sys_RefID'                     => $data[0]['Sys_ID_Header'] ?? '',
                     'combinedBudget_RefID'          => $data[0]['CombinedBudget_RefID'] ?? '',
@@ -177,136 +179,87 @@ class ReimbursementController extends Controller
 
     public function ReportReimbursementSummary(Request $request)
     {
-        $varAPIWebToken = $request->session()->get('SessionLogin');
-        $request->session()->forget("SessionReimbursementNumber");
-        $dataRem = Session::get("ReimbursementReportSummaryDataPDF");
-
-        if (!empty($_GET['var'])) {
-            $var =  $_GET['var'];
-        }
-        $compact = [
-            'varAPIWebToken' => $varAPIWebToken,
-            'statusRevisi' => 1,
-            'statusHeader' => "Yes",
-            'statusDetail' => 1,
-            'dataHeader' => [],
-            'dataRem' => $dataRem
-        
-        ];
-        // dump($dataRem);
-
-        return view('Process.Reimbursement.Reports.ReportReimbursementSummary', $compact);
-    }
-
-    public function ReportReimbursementSummaryData( $project_code)
-    {        
-        try {
-            Log::error("Error at ",[$project_code]);
-
-            $varAPIWebToken = Session::get('SessionLogin');
-
-            $filteredArray = Helper_APICall::setCallAPIGateway(
-                Helper_Environment::getUserSessionID_System(),
-                $varAPIWebToken, 
-                'report.form.documentForm.finance.getReimbursementSummary', 
-                'latest',
-                [
-                    'parameter' => [
-                        'CombinedBudgetCode' => $project_code,
-                        'Vendor_RefID' => NULL
-                        // 'CombinedBudgetCode' =>  $project_code,
-                        // 'CombinedBudgetSectionCode' =>  $site_code,
-                        // 'Warehouse_RefID' => NULL
-                    ],
-                     'SQLStatement' => [
-                        'pick' => null,
-                        'sort' => null,
-                        'filter' => null,
-                        'paging' => null
-                        ]
-                ]
-            );
-            
-            Log::error("Error at " ,$filteredArray);
-            if ($filteredArray['metadata']['HTTPStatusCode'] !== 200) {
-                return redirect()->back()->with('NotFound', 'Process Error');
-
-            }
-            Session::put("ReimbursementReportSummaryDataPDF", $filteredArray['data']['data']);
-            Session::put("ReimbursementReportSummaryDataExcel", $filteredArray['data']['data']);
-            return $filteredArray['data']['data'];
-        }
-        catch (\Throwable $th) {
-            Log::error("Error at " . $th->getMessage());
-            return redirect()->back()->with('NotFound', 'Process Error');
-        }
+        return view('Process.Reimbursement.Reports.ReportReimbursementSummary');
     }
 
     public function ReportReimbursementSummaryStore(Request $request)
     {
-        // tes;
         try {
-            $project_code = $request->project_code_second;
-            // $site_code = $request->site_id_second;
+            $date           = $request->remDate;
+            $budget         = [
+                "id"        => $request->budget_id,
+                "code"      => $request->budget_code,
+            ];
+            $customerID     = $request->customer_id;
 
-            $statusHeader = "Yes";
-            Log::error("Error at " ,[$request->all()]);
-            if ($project_code == "") {
-                Session::forget("ReimbursementReportSummaryDataPDF");
-                Session::forget("ReimbursementReportSummaryDataExcel");
-                
-                return redirect()->route('Reimbursement.ReportReimbursementSummary')->with('NotFound', 'Cannot Empty');
+            $response = $this->reimbursementService->getReimbursementSummary(
+                $budget['code'], 
+                $customerID,
+                $date
+            );
+            
+            if ($response['metadata']['HTTPStatusCode'] !== 200) {
+                throw new \Exception('Failed to fetch Reimbursement Summary Report');
             }
 
-            $compact = $this->ReportReimbursementSummaryData($project_code);
-            // dd($compact);
-            // if ($compact['dataHeader'] == []) {
-            //     Session::forget("PReimbursementSummaryReportDataPDF");
-            //     Session::forget("PReimbursementSummaryReportDataExcel");
+            $compact = [
+                'status'    => $response['metadata']['HTTPStatusCode'],
+                'data'      => $response['data']['data']
+            ];
 
-            //     return redirect()->back()->with('NotFound', 'Data Not Found');
-            // }
-
-            return redirect()->route('Reimbursement.ReportReimbursementSummary');
+            return response()->json($compact);
         } catch (\Throwable $th) {
-            Log::error("Error at " . $th->getMessage());
-            return redirect()->back()->with('NotFound', 'Process Error');
+            Log::error("Report Reimbursement Summary Store Function Error:" . $th->getMessage());
+            
+            $compact = [
+                'status'    => 500,
+                'message'   => $th->getMessage()
+            ];
+
+            return response()->json($compact);
         }
     }
 
     public function PrintExportReportReimbursementSummary(Request $request)
     {
         try {
-            $dataPDF = Session::get("ReimbursementReportSummaryDataPDF");
-            $dataExcel = Session::get("ReimbursementReportSummaryDataExcel");
+            $type                     = $request->printType;
+            $budgetName               = $request->budgetName;
+            $customerName             = $request->customerName;
+            $remDate                  = $request->remDate;
+            $dataReimbursementSummary = json_decode($request->dataReport, true);
 
-            
-            if ($dataPDF && $dataExcel) {
-                $print_type = $request->print_type;
-                if ($print_type == "PDF") {
-                    $dataRem = Session::get("ReimbursementReportSummaryDataPDF");
-                    // dd($dataRem);
+            if ($dataReimbursementSummary) {
+                if ($type === "PDF") {
+                    $pdf = PDF::loadView('Process.Reimbursement.Reports.ReportReimbursementSummary_pdf', [
+                        'dataRem'       => $dataReimbursementSummary, 
+                        'budgetName'    => $budgetName,
+                        'customerName'  => $customerName,
+                        'remDate'       => $remDate
+                        ])->setPaper('a4', 'landscape');
 
-                    $pdf = PDF::loadView('Process.Reimbursement.Reports.ReportReimbursementSummary_pdf', ['dataRem' => $dataRem])->setPaper('a4', 'landscape');
                     $pdf->output();
-                    $dom_pdf = $pdf->getDomPDF();
-
-                    $canvas = $dom_pdf ->get_canvas();
-                    $width = $canvas->get_width();
-                    $height = $canvas->get_height();
+                    $dom_pdf    = $pdf->getDomPDF();
+                    $canvas     = $dom_pdf ->get_canvas();
+                    $width      = $canvas->get_width();
+                    $height     = $canvas->get_height();
                     $canvas->page_text($width - 88, $height - 35, "Page {PAGE_NUM} of {PAGE_COUNT}", null, 10, array(0, 0, 0));
                     $canvas->page_text(34, $height - 35, "Print by " . $request->session()->get("SessionLoginName"), null, 10, array(0, 0, 0));
 
                     return $pdf->download('Export Report Reimbursement Summary.pdf');
-                } else if ($print_type == "Excel") {
-                    return Excel::download(new ExportReportReimbursementSummary, 'Export Report Reimbursement Summary.xlsx');
+                } else if ($type === "EXCEL") {
+                    return Excel::download(new ExportReportReimbursementSummary($dataReimbursementSummary), 'Export Report Reimbursement Summary.xlsx');
+                } else {
+                    throw new \Exception('Failed to Export Reimbursement Summary Report');
                 }
             } else {
-                return redirect()->route('Reimbursement.ReimbursementSummary')->with('NotFound', 'Data Cannot Empty');
+                throw new \Exception('Reimbursement Summary Data is Empty');
             }
+
         } catch (\Throwable $th) {
-            Log::error("Error at " . $th->getMessage());
-            return redirect()->back()->with('NotFound', 'Process Error');
+            Log::error("Print Export Report Reimbursement Summary Function Error: " . $th->getMessage());
+
+            return response()->json(['statusCode' => 400]);
         }
     }
 }

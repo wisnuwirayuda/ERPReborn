@@ -658,7 +658,7 @@
     });
 
     $(window).one('load', function(e) {
-        getDocumentType("Reimbursement Revision Form");
+        // getDocumentType("Reimbursement Revision Form");
         getBudgetDetails(siteCode.value, dataTable);
     });
 </script>

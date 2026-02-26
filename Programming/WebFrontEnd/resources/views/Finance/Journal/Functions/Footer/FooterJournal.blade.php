@@ -759,6 +759,8 @@
                     });
 
                     $('#journal_success_table').css("width", "100%");
+                    $('#journal_success_table_length').hide();
+                    $('#journal_success_table_filter').hide();
 
                     $('#successFormModal').modal('show');
 

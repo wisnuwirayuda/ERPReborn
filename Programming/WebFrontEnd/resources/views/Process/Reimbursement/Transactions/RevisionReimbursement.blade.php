@@ -29,7 +29,7 @@
             <div class="card">
                 <form method="post" action="{{ route('SelectWorkFlow') }}" id="FormSubmitReimbursement">
                 @csrf
-                    <input type="hidden" name="DocumentTypeID" id="DocumentTypeID" />
+                    <input type="hidden" name="DocumentTypeID" id="DocumentTypeID" value="<?= $documentTypeRefID; ?>" />
                     <input type="hidden" name="reimbursement_RefID" id="reimbursement_RefID" value="<?= $header['sys_RefID']; ?>" />
                     <input type="hidden" name="var_combinedBudget_RefID" id="var_combinedBudget_RefID" value="<?= $header['combinedBudget_RefID']; ?>" />
 

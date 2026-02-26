@@ -50,11 +50,11 @@ class PurchaseOrderService
             'latest',
             [
                 'parameter'     => [
-                    'CombinedBudgetCode'                    => $budget,
-                    'CombinedBudgetSectionCode'             => $subBudget ? $subBudget : NULL,
-                    'Supplier_RefID'                        => $supplier ? $supplier : NULL
-                    // 'StartDate'                             => $date ? $startDate : NULL,
-                    // 'EndDate'                               => $date ? $endDate : NULL
+                    'CombinedBudgetCode'        => $budget,
+                    'CombinedBudgetSectionCode' => $subBudget ? $subBudget : NULL,
+                    'Supplier_RefID'            => $supplier ? $supplier : NULL
+                    // 'StartDate'              => $date ? $startDate : NULL,
+                    // 'EndDate'                => $date ? $endDate : NULL
                 ]
             ]
         );

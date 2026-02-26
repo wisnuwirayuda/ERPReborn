@@ -154,6 +154,7 @@ class CreditNoteController extends Controller
 
                     return $pdf->download('Export Report Credit Note Summary.pdf');
                 } else if ($type === "EXCEL") {
+                    return Excel::download(new ExportReportCreditNoteSummary($dataCreditNoteSummary), 'Export Report Credit Note Summary.xlsx');
                 } else {
                     throw new \Exception('Failed to Export Credit Note Summary Report');
                 }

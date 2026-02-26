@@ -165,168 +165,92 @@ class DebitNoteController extends Controller
 
     public function ReportDebitNoteSummary(Request $request)
     {
-        $varAPIWebToken = $request->session()->get('SessionLogin');
-        $request->session()->forget("SessionPurchaseRequisitionNumber");
-        $dataDN = Session::get("DebitNoteReportSummaryDataPDF");
-
-        if (!empty($_GET['var'])) {
-            $var =  $_GET['var'];
-        }
-        $compact = [
-            'varAPIWebToken' => $varAPIWebToken,
-            'statusRevisi' => 1,
-            'statusHeader' => "Yes",
-            'statusDetail' => 1,
-            'dataHeader' => [],
-            'dataDN' => $dataDN
-        
-        ];
-        // dump($dataDN);
-
-        return view('Process.DebitNote.Reports.ReportDebitNoteSummary', $compact);
-    }
-
-    public function ReportDebitNoteSummaryData($project_code, $site_code, $start_date = null, $end_date = null)
-    {
-        try {
-            $varAPIWebToken = Session::get('SessionLogin');
-
-            // default date range kalau kosong
-            if (empty($start_date) && empty($end_date)) {
-                $start_date = now()->startOfMonth()->format('Y-m-d') . ' 00:00:00+07';
-                $end_date   = now()->endOfMonth()->format('Y-m-d') . ' 23:59:59+07';
-            }   
-
-            $params = [
-                'parameter' => [
-                    'CombinedBudgetCode' => $project_code,
-                    'CombinedBudgetSectionCode' => $site_code,
-                ],
-                'SQLStatement' => [
-                    'pick' => null,
-                    'sort' => null,
-                    'filter' => [],
-                    'paging' => null
-                ]
-            ];
-
-            // filter by date range
-            if (!empty($start_date) && !empty($end_date)) {
-                $params['SQLStatement']['filter'][] = [
-                    'condition' => 'Between',
-                    'field' => 'date',
-                    'value' => [
-                        'from' => \Carbon\Carbon::parse($start_date)->format('Y-m-d') . ' 00:00:00+07',
-                        'to'   => \Carbon\Carbon::parse($end_date)->format('Y-m-d') . ' 23:59:59+07',
-                    ],
-                ];
-            }
-            // Log::info("Filter Date Payload", [
-            //     'from' => $start_date,
-            //     'to'   => $end_date
-            // ]);
-            // Log::info("Params send to API", $params);
-
-            $filteredArray = Helper_APICall::setCallAPIGateway(
-                Helper_Environment::getUserSessionID_System(),
-                $varAPIWebToken, 
-                'report.form.documentForm.finance.getDebitNoteSummary', 
-                'latest',
-                $params
-            );
-
-            if ($filteredArray['metadata']['HTTPStatusCode'] !== 200) {
-                return redirect()->back()->with('NotFound', 'Process Error');
-            }
-            // Log::info("Keys:", array_keys($filteredArray['data']['data'][0]));
-
-            Session::put("DebitNoteReportSummaryDataPDF", $filteredArray['data']['data']);
-            Session::put("DebitNoteReportSummaryDataExcel", $filteredArray['data']['data']);
-            return $filteredArray['data']['data'];
-
-        } catch (\Throwable $th) {
-            Log::error("Error at " . $th->getMessage());
-        }
+        return view('Process.DebitNote.Reports.ReportDebitNoteSummary');
     }
 
     public function ReportDebitNoteSummaryStore(Request $request)
     {
         try {
-            $project_code = $request->project_code_second;
-            $site_code = $request->site_code_second;
-            $start_date = $request->start_date;
-            $end_date = $request->end_date;
+            $date           = $request->dnDate;
+            $budget         = [
+                "id"        => $request->budget_id,
+                "code"      => $request->budget_code,
+            ];
+            $subBudget      = [
+                "id"        => $request->sub_budget_id,
+                "code"      => $request->sub_budget_code,
+            ];
+            $customerID     = $request->customer_id;
 
-            // convert ke format Y-m-d H:i:s+07
-            if (!empty($start_date)) {
-                $start_date = \Carbon\Carbon::parse($start_date)->format('Y-m-d 00:00:00+07');
-            }
-            if (!empty($end_date)) {
-                $end_date = \Carbon\Carbon::parse($end_date)->format('Y-m-d 23:59:59+07');
-            }
+            $response = $this->debitNoteService->getDebitNoteSummary(
+                $budget['code'], 
+                $subBudget['code'], 
+                $date,
+                $customerID
+            );
 
-
-            Session::put('ReportDebitNoteSummaryFilter', [
-                'project_code' => $project_code,
-                'site_code' => $site_code,
-                'start_date' => $start_date,
-                'end_date' => $end_date,
-            ]);
-
-            // Log::info("Filter params: ", [
-            //     'project_code' => $project_code,
-            //     'site_code' => $site_code,
-            //     'start_date' => $start_date,
-            //     'end_date' => $end_date,
-            // ]);
-
-            if ($project_code == "" && $site_code == "" && $start_date == "" && $end_date == "") {
-                Session::forget("DebitNoteReportSummaryDataPDF");
-                Session::forget("DebitNoteReportSummaryDataExcel");
-                
-                return redirect()->route('DebitNote.ReportDebitNoteSummary')->with('NotFound', 'Cannot Empty');
+            if ($response['metadata']['HTTPStatusCode'] !== 200) {
+                throw new \Exception('Failed to fetch Reimbursement Summary Report');
             }
 
-            $compact = $this->ReportDebitNoteSummaryData($project_code, $site_code, $start_date, $end_date);
+            $compact = [
+                'status'    => $response['metadata']['HTTPStatusCode'],
+                'data'      => $response['data']['data']
+            ];
 
-            return redirect()->route('DebitNote.ReportDebitNoteSummary');
+            return response()->json($compact);
         } catch (\Throwable $th) {
-            Log::error("Error at " . $th->getMessage());
+            Log::error("Report Debit Note Summary Store Function Error:" . $th->getMessage());
+            
+            $compact = [
+                'status'    => 500,
+                'message'   => $th->getMessage()
+            ];
+
+            return response()->json($compact);
         }
     }
 
     public function PrintExportReportDebitNoteSummary(Request $request)
     {
         try {
-            $dataPDF = Session::get("DebitNoteReportSummaryDataPDF");
-            $dataExcel = Session::get("DebitNoteReportSummaryDataExcel");
+            $type                   = $request->printType;
+            $budgetName             = $request->budgetName;
+            $customerName           = $request->customerName;
+            $dnDate                 = $request->dnDate;
+            $dataDebitNoteSummary   = json_decode($request->dataReport, true);
 
-            
-            if ($dataPDF && $dataExcel) {
-                $print_type = $request->print_type;
-                if ($print_type == "PDF") {
-                    $dataDN = Session::get("DebitNoteReportSummaryDataPDF");
+            if ($dataDebitNoteSummary) {
+                if ($type === "PDF") {
+                    $pdf = PDF::loadView('Process.DebitNote.Reports.ReportDebitNoteSummary_pdf', [
+                        'dataDN'        => $dataDebitNoteSummary, 
+                        'budgetName'    => $budgetName,
+                        'subBudgetName' => '-',
+                        'customerName'  => $customerName,
+                        'dnDate'        => $dnDate
+                        ])->setPaper('a4', 'landscape');
 
-                    $pdf = PDF::loadView('Process.DebitNote.Reports.ReportDebitNoteSummary_pdf', ['dataDN' => $dataDN])->setPaper('a4', 'landscape');
                     $pdf->output();
-                    $dom_pdf = $pdf->getDomPDF();
-
-                    $canvas = $dom_pdf ->get_canvas();
-                    $width = $canvas->get_width();
-                    $height = $canvas->get_height();
+                    $dom_pdf    = $pdf->getDomPDF();
+                    $canvas     = $dom_pdf ->get_canvas();
+                    $width      = $canvas->get_width();
+                    $height     = $canvas->get_height();
                     $canvas->page_text($width - 88, $height - 35, "Page {PAGE_NUM} of {PAGE_COUNT}", null, 10, array(0, 0, 0));
                     $canvas->page_text(34, $height - 35, "Print by " . $request->session()->get("SessionLoginName"), null, 10, array(0, 0, 0));
 
                     return $pdf->download('Export Report Debit Note Summary.pdf');
-                } else if ($print_type == "Excel") {
-                    return Excel::download(new ExportReportDebitNoteSummary, 'Export Report Debit Note Summary.xlsx');
+                } else if ($type === "EXCEL") {
+                    return Excel::download(new ExportReportDebitNoteSummary($dataDebitNoteSummary), 'Export Report Debit Note Summary.xlsx');
+                } else {
+                    throw new \Exception('Failed to Export Debit Note Summary Report');
                 }
             } else {
-                return redirect()->route('DebitNote.ReportDebitNoteSummary')->with('NotFound', 'Data Cannot Empty');
+                throw new \Exception('Debit Note Summary Data is Empty');
             }
         } catch (\Throwable $th) {
-            Log::error("Error at " . $th->getMessage());
-            return redirect()->back()->with('NotFound', 'Process Error');
+            Log::error("Print Export Report Debit Note Summary Function Error: " . $th->getMessage());
+
+            return response()->json(['statusCode' => 400]);
         }
     }
 }

@@ -199,9 +199,9 @@
                 link.href = window.URL.createObjectURL(blob);
 
                 if (response.type === "application/pdf") {
-                    link.download = "Export Report Purchase Request Summary.pdf";
+                    link.download = "Export Report Purchase Order Summary.pdf";
                 } else {
-                    link.download = "Export Report Purchase Request Summary.xlsx";
+                    link.download = "Export Report Purchase Order Summary.xlsx";
                 }
 
                 link.click();

@@ -103,7 +103,8 @@ class JournalController extends Controller
                     "balance" => 325000,
                     "from_to" => "(BCA) 5750423347 - Agus Salim",
                     "coa_code" => "1-1102 - Bank",
-                    "attachment" => "-"
+                    "attachment" => "-",
+                    "testing" => "-"
                 ],
                 [
                     "no" => 2,
@@ -116,7 +117,8 @@ class JournalController extends Controller
                     "balance" => 200000,
                     "from_to" => "(BNI) 8995885888 - PT QDC Technologies",
                     "coa_code" => "2-3001 - Hutang Lain - Lain",
-                    "attachment" => "-"
+                    "attachment" => "-",
+                    "testing" => "-"
                 ],
                 [
                     "no" => 3,
@@ -129,7 +131,8 @@ class JournalController extends Controller
                     "balance" => 50000,
                     "from_to" => "(BNI) 8995885888 - PT QDC Technologies",
                     "coa_code" => "2-3001 - Hutang Lain - Lain",
-                    "attachment" => "-"
+                    "attachment" => "-",
+                    "testing" => "-"
                 ],
                 [
                     "no" => 4,
@@ -142,7 +145,8 @@ class JournalController extends Controller
                     "balance" => 250000,
                     "from_to" => "(BCA) 5750423348 - Agus Salim",
                     "coa_code" => "1-1103 - Bank",
-                    "attachment" => "-"
+                    "attachment" => "-",
+                    "testing" => "-"
                 ],
                 [
                     "no" => 5,
@@ -155,7 +159,8 @@ class JournalController extends Controller
                     "balance" => 300000,
                     "from_to" => "(BCA) 5750423349 - Agus Salim",
                     "coa_code" => "1-1104 - Bank",
-                    "attachment" => "-"
+                    "attachment" => "-",
+                    "testing" => "-"
                 ]
             ];
 
