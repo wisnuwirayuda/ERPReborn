@@ -57,7 +57,6 @@
             dataType: 'json',
             success: function(response) {
                 if (response.status === 200 && response.data[0]) {
-                    console.log('response', response);
                     let data = response.data;
                     dataReport = JSON.stringify(data);
                     

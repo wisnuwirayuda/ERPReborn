@@ -240,7 +240,7 @@ class DebitNoteController extends Controller
 
                     return $pdf->download('Export Report Debit Note Summary.pdf');
                 } else if ($type === "EXCEL") {
-                    # code...
+                    return Excel::download(new ExportReportDebitNoteSummary($dataDebitNoteSummary), 'Export Report Debit Note Summary.xlsx');
                 } else {
                     throw new \Exception('Failed to Export Debit Note Summary Report');
                 }
@@ -252,37 +252,5 @@ class DebitNoteController extends Controller
 
             return response()->json(['statusCode' => 400]);
         }
-
-        // try {
-        //     $dataPDF = Session::get("DebitNoteReportSummaryDataPDF");
-        //     $dataExcel = Session::get("DebitNoteReportSummaryDataExcel");
-
-            
-        //     if ($dataPDF && $dataExcel) {
-        //         $print_type = $request->print_type;
-        //         if ($print_type == "PDF") {
-        //             $dataDN = Session::get("DebitNoteReportSummaryDataPDF");
-
-        //             $pdf = PDF::loadView('Process.DebitNote.Reports.ReportDebitNoteSummary_pdf', ['dataDN' => $dataDN])->setPaper('a4', 'landscape');
-        //             $pdf->output();
-        //             $dom_pdf = $pdf->getDomPDF();
-
-        //             $canvas = $dom_pdf ->get_canvas();
-        //             $width = $canvas->get_width();
-        //             $height = $canvas->get_height();
-        //             $canvas->page_text($width - 88, $height - 35, "Page {PAGE_NUM} of {PAGE_COUNT}", null, 10, array(0, 0, 0));
-        //             $canvas->page_text(34, $height - 35, "Print by " . $request->session()->get("SessionLoginName"), null, 10, array(0, 0, 0));
-
-        //             return $pdf->download('Export Report Debit Note Summary.pdf');
-        //         } else if ($print_type == "Excel") {
-        //             return Excel::download(new ExportReportDebitNoteSummary, 'Export Report Debit Note Summary.xlsx');
-        //         }
-        //     } else {
-        //         return redirect()->route('DebitNote.ReportDebitNoteSummary')->with('NotFound', 'Data Cannot Empty');
-        //     }
-        // } catch (\Throwable $th) {
-        //     Log::error("Error at " . $th->getMessage());
-        //     return redirect()->back()->with('NotFound', 'Process Error');
-        // }
     }
 }
