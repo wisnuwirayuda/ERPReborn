@@ -8,13 +8,7 @@
       <div class="modal-body">
         <div class="wrapper-budget card-body table-responsive p-0" style="max-height:200px;">
           <table class="table table-head-fixed text-nowrap table-sm" id="tableGeneralJournalList" style="border: 1px solid #dee2e6;">
-            <thead>
-              <th style="padding-top: 10px;padding-bottom: 10px;border-right:1px solid #e9ecef;text-align: center;">No</th>
-              <th style="padding-top: 10px;padding-bottom: 10px;border-right:1px solid #e9ecef;text-align: center;">Product</th>
-              <th style="padding-top: 10px;padding-bottom: 10px;border-right:1px solid #e9ecef;text-align: center;">COA</th>
-              <th style="padding-top: 10px;padding-bottom: 10px;border-right:1px solid #e9ecef;text-align: center;">COA Status</th>
-              <th style="padding-top: 10px;padding-bottom: 10px;border-right:1px solid #e9ecef;text-align: center;">Value</th>
-            </thead>
+            <thead></thead>
             <tbody></tbody>
           </table>
         </div>

@@ -583,29 +583,17 @@
         return hasFullRow;
     }
 
-    function summaryData() {
+    function summarySettlementData() {
         const sourceTable = document.getElementById('journal_settlement_table').getElementsByTagName('tbody')[0];
         const targetTable = document.getElementById('tableGeneralJournalList').getElementsByTagName('tbody')[0];
 
-        let dataArr = [];
         const rows = sourceTable.getElementsByTagName('tr');
-
-        console.log('rows', rows);
 
         for (let [index, row] of Array.from(rows).entries()) {
             const productInput  = row.querySelector('input[id^="product_name"]');
             const coaInput      = row.querySelector('input[id^="coa_name"]');
             const coaSelect     = row.querySelector('select[id^="accountingEntryRecordType_RefID"]');
             const valueInput    = row.querySelector('input[id^="debit_credit"]');
-
-            // console.log('productInput', productInput);
-            // console.log('coaInput', coaInput);
-            // console.log('coaSelect', coaSelect);
-            // console.log('valueInput', valueInput);
-
-            // console.log('rows.length', rows.length);
-            // console.log('rows.length - 1', rows.length - 1);
-            // console.log('rows.length - 1 != index', rows.length - 1 != index);
 
             if (
                 rows.length - 1 != index && 
@@ -620,10 +608,6 @@
                 const coasStatus    = coaSelect.value.trim();
                 const values        = valueInput.value.trim();
 
-                console.log('here');
-
-                // console.log('products', products);
-
                 let found = false;
 
                 if (!found) {
@@ -637,8 +621,6 @@
             }
         }
 
-        console.log('dataStore', dataStore);
-
         $('#tableGeneralJournalList').DataTable({
             destroy: true,
             data: dataStore,
@@ -647,6 +629,7 @@
             scroller: true,
             columns: [
                 {
+                    title: "No",
                     data: null,
                     render: function (data, type, row, meta) {
                         return '<td class="align-middle text-center">' +
@@ -655,16 +638,19 @@
                     }
                 },
                 {
+                    title: "Product",
                     data: 'productName',
                     defaultContent: '-',
                     className: "align-middle"
                 },
                 {
+                    title: "COA",
                     data: 'coaName',
                     defaultContent: '-',
                     className: "align-middle"
                 },
                 {
+                    title: "COA Status",
                     data: null,
                     defaultContent: '-',
                     render: function (data, type, row, meta) {
@@ -672,6 +658,7 @@
                     }
                 },
                 {
+                    title: "Value",
                     data: null,
                     defaultContent: '-',
                     render: function (data, type, row, meta) {
@@ -692,7 +679,7 @@
         const isTableNotEmpty = checkOneLineSettlementContents();
 
         if (isTableNotEmpty) {
-            summaryData();
+            summarySettlementData();
         } else {
             $("#settlementDetailsMessage").show();
         }

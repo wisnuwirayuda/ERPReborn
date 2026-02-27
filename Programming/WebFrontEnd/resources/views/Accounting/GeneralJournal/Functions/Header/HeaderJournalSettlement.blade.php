@@ -31,7 +31,7 @@
 </div>
 
 <!-- FOOTER -->
-<div class="card-body tableShowHideBudget">
+<div class="card-body">
     <div class="row">
         <div class="col">
             <div class="text-red" id="settlementDetailsMessage" style="display: none;">

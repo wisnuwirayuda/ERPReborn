@@ -140,7 +140,7 @@
         } else if (journalTypeValue === "POSTING") {
             
         } else {
-            
+            validationAdjustmentForm();
         }
     }
 
