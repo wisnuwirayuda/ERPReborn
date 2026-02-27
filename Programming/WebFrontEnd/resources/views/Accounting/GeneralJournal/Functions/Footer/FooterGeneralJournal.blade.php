@@ -1,4 +1,5 @@
 <script>
+    let dataStore = [];
     let journalTypeValue = null;
     // let isAdjustmentType = true;
     let currentIndexPickAccountPayablePosting = -1;
@@ -131,6 +132,18 @@
         }
     }
 
+    function onClickSubmitButton() {
+        if (journalTypeValue === "SETTLEMENT") {
+            validationSettlementForm();
+        } else if (journalTypeValue === "FIXED_ASSET") {
+            
+        } else if (journalTypeValue === "POSTING") {
+            
+        } else {
+            
+        }
+    }
+
     $('#tableAccountPayables').on('click', 'tbody tr', function() {
         const sysId         = $(this).find('input[data-trigger="sys_id_modal_account_payable"]').val();
         const trano         = $(this).find('td:nth-child(2)').text();
@@ -176,6 +189,8 @@
 
             updateField(currentIndexPickCOA, 'coa_id', parseInt(sysId));
             updateField(currentIndexPickCOA, 'coa_name', `${code} - ${name}`);
+
+            checkOneLineSettlementContents(currentIndexPickCOA);
         } else if (journalTypeValue === "FIXED_ASSET") {
             $(`#coaID${currentIndexPickCOA}`).val(sysId);
             $(`#coaName${currentIndexPickCOA}`).val(`${code} - ${name}`);

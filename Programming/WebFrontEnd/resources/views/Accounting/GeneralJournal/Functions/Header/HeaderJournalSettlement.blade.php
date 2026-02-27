@@ -34,7 +34,7 @@
 <div class="card-body tableShowHideBudget">
     <div class="row">
         <div class="col">
-            <div class="text-red" id="budgetDetailsMessage" style="display: none;">
+            <div class="text-red" id="settlementDetailsMessage" style="display: none;">
                 Please input at least one item.
             </div>
         </div>
