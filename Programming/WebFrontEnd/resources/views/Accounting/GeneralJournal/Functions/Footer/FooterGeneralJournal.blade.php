@@ -138,7 +138,7 @@
         } else if (journalTypeValue === "FIXED_ASSET") {
             validationFixedAssetForm();
         } else if (journalTypeValue === "POSTING") {
-            
+            validationPostingForm();
         } else {
             validationAdjustmentForm();
         }
@@ -158,11 +158,15 @@
             updateJournalPostingField(currentIndexPickAccountPayablePosting, 'budget_code_posting', `${budgetCode} - ${budgetName}`);
             updateJournalPostingField(currentIndexPickAccountPayablePosting, 'supplier_code_posting', `${supplierCode} - ${supplierName}`);
 
+            checkOneLinePostingContents(currentIndexPickAccountPayablePosting);
+
             $(`#transaction_id_posting${currentIndexPickAccountPayablePosting}`).val(sysId);
+            $(`#transaction_number_posting${currentIndexPickAccountPayablePosting}`).val(trano);
             $(`#budget_code_posting${currentIndexPickAccountPayablePosting}`).val(`${budgetCode} - ${budgetName}`);
             $(`#supplier_code_posting${currentIndexPickAccountPayablePosting}`).val(`${supplierCode} - ${supplierName}`);
-            $(`#transaction_number_posting${currentIndexPickAccountPayablePosting}`).val(trano);
-            $(`#transaction_number_posting${currentIndexPickAccountPayablePosting}`).css({"background-color": "#e9ecef", "border": "1px solid #ced4da"});
+            $(`#transaction_number_posting${currentIndexPickAccountPayablePosting}`).css({"background-color": "#e9ecef"});
+            $(`#budget_code_posting${currentIndexPickAccountPayablePosting}`).css({"background-color": "#e9ecef"});
+            $(`#supplier_code_posting${currentIndexPickAccountPayablePosting}`).css({"background-color": "#e9ecef"});
 
             currentIndexPickAccountPayablePosting = -1;
         } else {
