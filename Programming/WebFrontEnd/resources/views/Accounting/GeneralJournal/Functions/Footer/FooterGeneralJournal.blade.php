@@ -136,7 +136,7 @@
         if (journalTypeValue === "SETTLEMENT") {
             validationSettlementForm();
         } else if (journalTypeValue === "FIXED_ASSET") {
-            
+            validationFixedAssetForm();
         } else if (journalTypeValue === "POSTING") {
             
         } else {
