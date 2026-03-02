@@ -37,4 +37,9 @@ class TaxReconController extends Controller
 
         return view('Accounting.TaxRecon.Transactions.RevisionTaxRecon', $compact);
     }
+
+    public function ReportTaxReconSummary(Request $request)
+    {
+        return view('Accounting.TaxRecon.Reports.ReportTaxReconSummary');
+    }
 }
