@@ -104,7 +104,7 @@
         <!-- ENDING BALANCE -->
         <div class="col px-0" style="border: 1px solid #ced4da; border-radius: 15px;">
             <div class="p-3 d-flex align-items-center justify-content-between text-bold" style="background-color: #e8f6e9; color: #000; font-size: small; border-top-left-radius: 14px; border-top-right-radius: 14px;">
-                <div>ENGDING BALANCE</div>
+                <div>ENDING BALANCE</div>
                 <div class="d-flex align-items-center justify-content-center invisible" style="background-color: #F9D923; padding: 5px; min-width: 25px; min-height: 25px; border-radius: 100%; color: #fff;">0</div>
             </div>
             <hr class="m-0" style="background-color: #ced4da;" />
