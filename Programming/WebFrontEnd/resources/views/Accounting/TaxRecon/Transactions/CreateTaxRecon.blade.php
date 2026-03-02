@@ -83,7 +83,7 @@
                                             <tr>
                                                 <td style="padding-top: 10px !important; padding-bottom: 10px !important; text-align: center !important; border: 1px solid #e9ecef !important; padding-left: 10px !important; padding-right: 10px !important;">
                                                     <input hidden data-budget-id="sys_ID" />
-                                                    <input type="checkbox" aria-label="Checkbox for following text input" onchange="onCheckTaxDetails(this, '0')" />
+                                                    <input type="checkbox" aria-label="Checkbox for following text input" onchange="onCheckVatDetails(this, '0')" />
                                                 </td>
                                                 <td style="padding-top: 10px !important; padding-bottom: 10px !important; text-align: center !important; border: 1px solid #e9ecef !important; padding-left: 10px !important; padding-right: 10px !important;">
                                                     AP-23000091
@@ -115,7 +115,7 @@
                                             <tr>
                                                 <td style="padding-top: 10px !important; padding-bottom: 10px !important; text-align: center !important; border: 1px solid #e9ecef !important; padding-left: 10px !important; padding-right: 10px !important;">
                                                     <input hidden data-budget-id="sys_ID" />
-                                                    <input type="checkbox" aria-label="Checkbox for following text input" onchange="onCheckTaxDetails(this, '1')" />
+                                                    <input type="checkbox" aria-label="Checkbox for following text input" onchange="onCheckVatDetails(this, '1')" />
                                                 </td>
                                                 <td style="padding-top: 10px !important; padding-bottom: 10px !important; text-align: center !important; border: 1px solid #e9ecef !important; padding-left: 10px !important; padding-right: 10px !important;">
                                                     AP-23000092
@@ -147,7 +147,7 @@
                                             <tr>
                                                 <td style="padding-top: 10px !important; padding-bottom: 10px !important; text-align: center !important; border: 1px solid #e9ecef !important; padding-left: 10px !important; padding-right: 10px !important;">
                                                     <input hidden data-budget-id="sys_ID" />
-                                                    <input type="checkbox" aria-label="Checkbox for following text input" onchange="onCheckTaxDetails(this, '2')" />
+                                                    <input type="checkbox" aria-label="Checkbox for following text input" onchange="onCheckVatDetails(this, '2')" />
                                                 </td>
                                                 <td style="padding-top: 10px !important; padding-bottom: 10px !important; text-align: center !important; border: 1px solid #e9ecef !important; padding-left: 10px !important; padding-right: 10px !important;">
                                                     TREM-23000002
@@ -179,7 +179,7 @@
                                             <tr>
                                                 <td style="padding-top: 10px !important; padding-bottom: 10px !important; text-align: center !important; border: 1px solid #e9ecef !important; padding-left: 10px !important; padding-right: 10px !important;">
                                                     <input hidden data-budget-id="sys_ID" />
-                                                    <input type="checkbox" aria-label="Checkbox for following text input" onchange="onCheckTaxDetails(this, '3')" />
+                                                    <input type="checkbox" aria-label="Checkbox for following text input" onchange="onCheckVatDetails(this, '3')" />
                                                 </td>
                                                 <td style="padding-top: 10px !important; padding-bottom: 10px !important; text-align: center !important; border: 1px solid #e9ecef !important; padding-left: 10px !important; padding-right: 10px !important;">
                                                     INV-23000002
@@ -211,7 +211,7 @@
                                             <tr>
                                                 <td style="padding-top: 10px !important; padding-bottom: 10px !important; text-align: center !important; border: 1px solid #e9ecef !important; padding-left: 10px !important; padding-right: 10px !important;">
                                                     <input hidden data-budget-id="sys_ID" />
-                                                    <input type="checkbox" aria-label="Checkbox for following text input" onchange="onCheckTaxDetails(this, '4')" />
+                                                    <input type="checkbox" aria-label="Checkbox for following text input" onchange="onCheckVatDetails(this, '4')" />
                                                 </td>
                                                 <td style="padding-top: 10px !important; padding-bottom: 10px !important; text-align: center !important; border: 1px solid #e9ecef !important; padding-left: 10px !important; padding-right: 10px !important;">
                                                     DN-23000008
@@ -264,7 +264,7 @@
                                             <tr>
                                                 <td style="padding-top: 10px !important; padding-bottom: 10px !important; text-align: center !important; border: 1px solid #e9ecef !important; padding-left: 10px !important; padding-right: 10px !important;">
                                                     <input hidden data-budget-id="sys_ID" />
-                                                    <input type="checkbox" aria-label="Checkbox for following text input" />
+                                                    <input type="checkbox" aria-label="Checkbox for following text input" onchange="onCheckWhtDetails(this, '0')" />
                                                 </td>
                                                 <td style="padding-top: 10px !important; padding-bottom: 10px !important; text-align: center !important; border: 1px solid #e9ecef !important; padding-left: 10px !important; padding-right: 10px !important;">
                                                     AP-23000091
@@ -287,14 +287,12 @@
                                                 <td style="padding-top: 10px !important; padding-bottom: 10px !important; text-align: center !important; border: 1px solid #e9ecef !important; padding-left: 10px !important; padding-right: 10px !important;">
                                                     2%
                                                 </td>
-                                                <td style="padding-top: 10px !important; padding-bottom: 10px !important; text-align: center !important; border: 1px solid #e9ecef !important; padding-left: 10px !important; padding-right: 10px !important;">
-                                                    5,000,000.00
-                                                </td>
+                                                <td style="padding-top: 10px !important; padding-bottom: 10px !important; text-align: center !important; border: 1px solid #e9ecef !important; padding-left: 10px !important; padding-right: 10px !important;">5,000,000.00</td>
                                             </tr>
                                             <tr>
                                                 <td style="padding-top: 10px !important; padding-bottom: 10px !important; text-align: center !important; border: 1px solid #e9ecef !important; padding-left: 10px !important; padding-right: 10px !important;">
                                                     <input hidden data-budget-id="sys_ID" />
-                                                    <input type="checkbox" aria-label="Checkbox for following text input" />
+                                                    <input type="checkbox" aria-label="Checkbox for following text input" onchange="onCheckWhtDetails(this, '1')" />
                                                 </td>
                                                 <td style="padding-top: 10px !important; padding-bottom: 10px !important; text-align: center !important; border: 1px solid #e9ecef !important; padding-left: 10px !important; padding-right: 10px !important;">
                                                     AP-23000092
@@ -317,9 +315,7 @@
                                                 <td style="padding-top: 10px !important; padding-bottom: 10px !important; text-align: center !important; border: 1px solid #e9ecef !important; padding-left: 10px !important; padding-right: 10px !important;">
                                                     2.65%
                                                 </td>
-                                                <td style="padding-top: 10px !important; padding-bottom: 10px !important; text-align: center !important; border: 1px solid #e9ecef !important; padding-left: 10px !important; padding-right: 10px !important;">
-                                                    10,000,000.00
-                                                </td>
+                                                <td style="padding-top: 10px !important; padding-bottom: 10px !important; text-align: center !important; border: 1px solid #e9ecef !important; padding-left: 10px !important; padding-right: 10px !important;">10,000,000.00</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -334,7 +330,7 @@
                                             </div>
                                         </div>
                                         <div class="col text-right" style="margin-right: 20px; font-size: 0.77rem; color: #212529; font-weight: 600;">
-                                            Total : <span id="TotalBudgetSelected">0.00</span>
+                                            Total : <span id="total_wht_table">0.00</span>
                                         </div>
                                     </div>
                                 </div>
@@ -359,7 +355,7 @@
                                             <tr>
                                                 <td style="padding-top: 10px !important; padding-bottom: 10px !important; text-align: center !important; border: 1px solid #e9ecef !important; padding-left: 10px !important; padding-right: 10px !important;">
                                                     <input hidden data-budget-id="sys_ID" />
-                                                    <input type="checkbox" aria-label="Checkbox for following text input" />
+                                                    <input type="checkbox" aria-label="Checkbox for following text input" onchange="onCheckPrepaidWhtDetails(this, '0')" />
                                                 </td>
                                                 <td style="padding-top: 10px !important; padding-bottom: 10px !important; text-align: center !important; border: 1px solid #e9ecef !important; padding-left: 10px !important; padding-right: 10px !important;">
                                                     INV-23000001
@@ -389,7 +385,7 @@
                                             <tr>
                                                 <td style="padding-top: 10px !important; padding-bottom: 10px !important; text-align: center !important; border: 1px solid #e9ecef !important; padding-left: 10px !important; padding-right: 10px !important;">
                                                     <input hidden data-budget-id="sys_ID" />
-                                                    <input type="checkbox" aria-label="Checkbox for following text input" />
+                                                    <input type="checkbox" aria-label="Checkbox for following text input" onchange="onCheckPrepaidWhtDetails(this, '1')" />
                                                 </td>
                                                 <td style="padding-top: 10px !important; padding-bottom: 10px !important; text-align: center !important; border: 1px solid #e9ecef !important; padding-left: 10px !important; padding-right: 10px !important;">
                                                     INV-23000002
@@ -429,7 +425,7 @@
                                             </div>
                                         </div>
                                         <div class="col text-right" style="margin-right: 20px; font-size: 0.77rem; color: #212529; font-weight: 600;">
-                                            Total : <span id="TotalBudgetSelected">0.00</span>
+                                            Total : <span id="total_prepaid_wht_table">0.00</span>
                                         </div>
                                     </div>
                                 </div>

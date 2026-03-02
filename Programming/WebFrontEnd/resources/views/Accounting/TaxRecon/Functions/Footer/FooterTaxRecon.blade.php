@@ -4,6 +4,8 @@
     let beginningBalance    = 500000000;
     let taxInTotal          = 0;
     let taxOutTotal         = 0;
+    let totalWHT            = 0;
+    let totalPrepaidWHT     = 0;
 
     function calculationCard() {
         const result = beginningBalance + taxInTotal - taxOutTotal;
@@ -37,7 +39,7 @@
         $('.tax-components').show();
     }
 
-    function onCheckTaxDetails(value, index) {
+    function onCheckVatDetails(value, index) {
         const rows = document.querySelectorAll("#vat_details_table tbody tr");
 
         rows.forEach((row, ind) => {
@@ -60,6 +62,38 @@
         });
 
         calculationCard();
+    }
+
+    function onCheckWhtDetails(value, index) {
+        const rows = document.querySelectorAll("#wht_details_table tbody tr");
+
+        rows.forEach((row, ind) => {
+            const eightCellText = row.querySelectorAll("td")[8].textContent;
+
+            if (index == ind && value.checked) {
+                totalWHT += parseFloat(eightCellText.replace(/,/g, ''));
+            } else if (index == ind && !value.checked) {
+                totalWHT -= parseFloat(eightCellText.replace(/,/g, ''));
+            }
+        });
+
+        $('#total_wht_table').text(currencyTotal(totalWHT));
+    }
+
+    function onCheckPrepaidWhtDetails(value, index) {
+        const rows = document.querySelectorAll("#prepaid_wht_details_table tbody tr");
+
+        rows.forEach((row, ind) => {
+            const eightCellText = row.querySelectorAll("td")[8].textContent;
+
+            if (index == ind && value.checked) {
+                totalPrepaidWHT += parseFloat(eightCellText.replace(/,/g, ''));
+            } else if (index == ind && !value.checked) {
+                totalPrepaidWHT -= parseFloat(eightCellText.replace(/,/g, ''));
+            }
+        });
+
+        $('#total_prepaid_wht_table').text(currencyTotal(totalPrepaidWHT));
     }
 
     $(window).one('load', function() {
