@@ -2,6 +2,7 @@
 @section('main')
 @include('Partials.navbar')
 @include('Partials.sidebar')
+@include('Accounting.TaxRecon.Functions.PopUp.PopUpTaxReconRevision')
 
 <div class="content-wrapper">
     <section class="content">
