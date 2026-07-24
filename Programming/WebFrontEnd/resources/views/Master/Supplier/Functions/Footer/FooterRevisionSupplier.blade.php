@@ -3,6 +3,8 @@
     let specializationData = [];
     const supplierCategoryId = document.getElementById("supplier_category_code_modal");
     const containerMultipleSpecialization = document.getElementById("multiple-specialization");
+    const categoryRefID = {!! json_encode($category_RefID ?? []) !!};
+    const specializationRefID = {!! json_encode($specialization_RefID ?? []) !!};
     const formList = {
         supplier_name: {
             component: '#supplier_name',
@@ -170,6 +172,8 @@
                 let html = '';
 
                 data.forEach(function (category) {
+                    let findCategory = categoryRefID.find(val => val == category.category_RefID);
+
                     html += `
                         <div class="category-container mb-3">
                             <!-- CATEGORY -->
@@ -181,6 +185,7 @@
                                     value="${category.category_RefID}"
                                     name="category[]"
                                     style="margin-top:0;"
+                                    ${findCategory ? 'checked' : ''}
                                 >
                                 <label
                                     class="form-check-label"
@@ -201,6 +206,8 @@
                         category.subCategories.forEach(function (sub) {
 
                             if (sub.subCategory_RefID) {
+                                let findSubCategory = specializationRefID.find(val => val == sub.subCategory_RefID);
+
                                 html += `
                                     <div class="form-check">
                                         <input
@@ -209,8 +216,8 @@
                                             id="subcategory_${sub.subCategory_RefID}"
                                             value="${sub.subCategory_RefID}"
                                             name="specialization[${category.category_RefID}][]"
-                                            disabled
                                             style="margin-top:0;"
+                                            ${findSubCategory ? 'checked' : 'disabled'}
                                         >
                                         <label
                                             class="form-check-label"
