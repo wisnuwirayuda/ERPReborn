@@ -26,6 +26,7 @@
   const bankAcronymVendor = document.getElementById('bank_acronym_vendor');
   const bankAcronymCorpCard = document.getElementById('bank_acronym_corp_card');
   const bankAcronymOther = document.getElementById('bank_acronym_other');
+  const dataTripBudgetDetails = {!! json_encode($dataTripBudgetDetails ?? []) !!};
   const validation = {
     sectionOne: {
       budgetID: getElement("project_name"),
@@ -323,6 +324,7 @@
           data.slice(...range).forEach(type => {
             const inputId = type.name.toLowerCase();
             const labelClass = hidden ? 'p-0 col-5 d-none' : 'p-0 col-5';
+            const findData = dataTripBudgetDetails.find(el => el.businessTripCostComponentEntity_RefID == type.value);
 
             const html = `
               <div class="col-3">
@@ -331,7 +333,7 @@
                   <div class="p-0">
                     <div class="input-group">
                       <input type="hidden" name="components[${type.value}][id]" value="${type.value}">
-                      <input name="components[${type.value}][value]" id="${inputId}" style="border-radius:0;" autocomplete="off" class="form-control number-without-negative">
+                      <input name="components[${type.value}][value]" id="${inputId}" value="${findData ? Utils.formatCurrency(findData.amountCurrencyValue) : ''}" style="border-radius:0;" autocomplete="off" class="form-control number-without-negative">
                     </div>
                   </div>
                 </div>
@@ -345,6 +347,7 @@
         $(".loading-container").hide();
 
         initializeBRFCalculation();
+        calculateTotalBRF();
       },
       error: function (textStatus, errorThrown) {
         console.log('error', textStatus, errorThrown);

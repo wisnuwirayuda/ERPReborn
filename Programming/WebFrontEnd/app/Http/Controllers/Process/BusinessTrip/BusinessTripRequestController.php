@@ -196,6 +196,13 @@ class BusinessTripRequestController extends Controller
                 throw new \Exception('Failed to fetch Detail Business Trip Request');
             }
 
+            $responseTripSequenceDetail = $this->businessTripService->getPersonBusinessTripSequenceDetail($brfID);
+
+            if ($responseTripSequenceDetail['metadata']['HTTPStatusCode'] !== 200) {
+                throw new \Exception('Failed to fetch Detail Business Trip Request Sequence Detail');
+            }
+
+            $dataTripSequenceDetail = $responseTripSequenceDetail['data']['data'];
             $details = $response['data']['data'] ?? [];
             $header = $details[0] ?? [];
 
@@ -212,6 +219,7 @@ class BusinessTripRequestController extends Controller
                 'destinationTo' => $header['DestinationPoint'],
                 'reasonTravel' => $header['ReasonToTravel'],
                 'fileID' => $header['Log_FileUpload_Pointer_RefID'],
+                'dataTripBudgetDetails' => $dataTripSequenceDetail,
                 'budget' => [
                     'id' => $header['CombinedBudget_RefID'],
                     'code' => $header['CombinedBudgetCode'],
@@ -230,7 +238,7 @@ class BusinessTripRequestController extends Controller
                 ]
             ];
 
-            dump($compact);
+            dump($header);
 
             return view('Process.BusinessTrip.BusinessTripRequest.Transactions.RevisionBusinessTripRequest', $compact);
         } catch (\Throwable $th) {
