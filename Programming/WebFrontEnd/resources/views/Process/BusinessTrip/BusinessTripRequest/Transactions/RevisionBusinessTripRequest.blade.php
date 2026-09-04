@@ -32,11 +32,11 @@
           <form id="businessTripRequestForm">
             @csrf
             <input hidden id="budgetDetailsData" />
-            <input hidden id="product_RefID" name="product_RefID" />
-            <input hidden id="workStructure_RefID" name="workStructure_RefID" />
-            <input hidden id="var_combinedBudget_RefID" name="var_combinedBudget_RefID" />
+            <input hidden id="product_RefID" name="product_RefID" value="<?= $product_RefID; ?>" />
+            <input hidden id="workStructure_RefID" name="workStructure_RefID" value="<?= $workStructure_RefID; ?>" />
             <input hidden id="DocumentTypeID" name="DocumentTypeID" value="<?= $documentType_RefID; ?>">
-            <input hidden id="combinedBudgetSectionDetail_RefID" name="combinedBudgetSectionDetail_RefID" />
+            <input hidden id="combinedBudgetSectionDetail_RefID" name="combinedBudgetSectionDetail_RefID"
+              value="<?= $combinedBudgetSectionDetail_RefID; ?>" />
 
             <!-- ADD NEW BUSINESS REQUEST TRIP FORM -->
             <div class="tab-content px-3 pt-4 pb-2" id="nav-tabContent">

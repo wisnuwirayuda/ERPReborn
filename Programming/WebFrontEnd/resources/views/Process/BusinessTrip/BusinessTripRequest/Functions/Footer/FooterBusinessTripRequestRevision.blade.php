@@ -12,7 +12,10 @@
   const totalBusinessTrip = [];
   const date = new Date();
   const today = new Date(date.setMonth(date.getMonth() - 3));
+  const subBudgetID = document.getElementById('site_id');
   const searchBudgetBtn = document.getElementById('budget_detail_search');
+  const combinedBudgetSectionDetailID = document.getElementById('combinedBudgetSectionDetail_RefID');
+  const workStructureID = document.getElementById('workStructure_RefID');
   const documentTypeID = document.getElementById("DocumentTypeID");
   const dateCommanceComp = document.getElementById('dateCommance');
   const dateEndComp = document.getElementById('dateEnd');
@@ -365,7 +368,6 @@
         workId: row.querySelector('input[id="workStructure_RefID"]').value
       };
 
-      // $("#var_combinedBudget_RefID").val(datas.sysId);
       $("#total_business_trip_request").val(datas.totalBudget);
       $("#total_balanced").val(datas.balanceBudget);
       $("#combinedBudgetSectionDetail_RefID").val(datas.sysId);
@@ -390,7 +392,6 @@
       budgetDetailsInput.value = '';
       currenctBudgetSelection = 0;
 
-      // $("#var_combinedBudget_RefID").val("");
       $("#total_business_trip_request").val("");
       $("#total_balanced").val("");
       $("#combinedBudgetSectionDetail_RefID").val("");
@@ -426,13 +427,27 @@
   function getBudgetDetails(site_id) {
     const tdStyle = 'padding: 10px !important; text-align: center !important; border: 1px solid #e9ecef !important;';
 
+    $("#loadingBudgetDetails").show();
+
     $.ajax({
       type: 'GET',
       url: '{!! route("getBudget") !!}?site_code=' + site_id,
       headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
       success: function (data) {
+        const findData = data.find(el => el.sys_ID == combinedBudgetSectionDetailID.value);
+
         $("#loadingBudgetDetails").hide();
         searchBudgetBtn.style.display = 'block';
+
+        if (findData) {
+          $("#budgetDetailsData").val(JSON.stringify({
+            totalBudget: numberFormatPHPCustom(findData.quantity * findData.priceBaseCurrencyValue, 2),
+            balanceBudget: numberFormatPHPCustom(findData.priceBaseCurrencyValue, 2),
+            sysId: String(findData.sys_ID),
+            productId: String(findData.product_RefID),
+            workId: String(workStructureID.value)
+          }));
+        }
 
         $.each(data, function (key, value) {
           const productColumn = value.product_RefID
@@ -458,7 +473,7 @@
                 <input hidden data-budget-id="sys_ID" value="${value.sys_ID}">
                 <input hidden id="workStructure_RefID" value="302000000000002">
                 <input hidden id="product_RefID" value="${value.product_RefID}">
-                <input type="checkbox" aria-label="Checkbox for following text input">
+                <input type="checkbox" aria-label="Checkbox for following text input" ${findData && findData.sys_ID == value.sys_ID ? 'checked' : 'disabled'}>
               </td>
               ${productColumn}
               <td style="${tdStyle}">${numberFormatPHPCustom(value.quantity * value.priceBaseCurrencyValue, 2)}</td>
@@ -969,7 +984,6 @@
     $("#budgetDetailsData").val("");
 
     $('table#budgetTable tbody').empty();
-    $("#loadingBudgetDetails").show();
 
     getBudgetDetails(sysId);
 
@@ -1174,6 +1188,7 @@
     getRequesters();
     getBeneficiaries();
     getBankList();
+    getBudgetDetails(subBudgetID.value);
 
     if (dateCommanceComp) {
       dateCommanceComp.setAttribute('min', today.toISOString().split('T')[0]);
@@ -1198,7 +1213,6 @@
     $("#bankAccountCorpCardListModalTrigger").prop("disabled", true);
     $("#bankAccountOtherListModalTrigger").prop("disabled", true);
     $("#bankOtherListModalTrigger").prop("disabled", true);
-    $("#loadingBudgetDetails").hide();
 
     // DIRECT TO VENDOR
     $("#bank_list_popup_vendor").prop("disabled", true);
