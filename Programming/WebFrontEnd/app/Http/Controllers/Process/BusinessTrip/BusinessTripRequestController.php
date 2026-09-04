@@ -235,10 +235,54 @@ class BusinessTripRequestController extends Controller
                     'position' => $header['RequesterWorkerPosition'],
                     'contact' => $header['RequesterWorkerContact'],
                     'name' => $header['RequesterWorkerName']
+                ],
+                'payment' => [
+                    'total' => $header['TotalTransactions'],
+                    'vendor' => [
+                        'value' => $header['PaymentToVendor_AmountCurrencyValue'],
+                        'bank' => [
+                            'id' => '',
+                            'name' => '',
+                            'acronym' => ''
+                        ],
+                        'account' => [
+                            'id' => $header['PaymentToVendor_PaymentFundingDestination_RefID'],
+                            'name' => ''
+                        ]
+                    ],
+                    'corpCard' => [
+                        'value' => $header['PaymentToCreditCard_AmountCurrencyValue'],
+                        'bank' => [
+                            'id' => '',
+                            'name' => '',
+                            'acronym' => ''
+                        ],
+                        'account' => [
+                            'id' => $header['PaymentToCreditCard_PaymentFundingDestination_RefID'],
+                            'name' => ''
+                        ]
+                    ],
+                    'other' => [
+                        'value' => $header['PaymentToOther_AmountCurrencyValue'],
+                        'beneficiary' => [
+                            'id' => $header['PaymentToOther_BeneficiaryWorkerJobsPosition_RefID'],
+                            'name' => '',
+                            'acronym' => ''
+                        ],
+                        'bank' => [
+                            'id' => '',
+                            'name' => '',
+                            'acronym' => ''
+                        ],
+                        'account' => [
+                            'id' => $header['PaymentToOther_PaymentFundingDestination_RefID'],
+                            'name' => ''
+                        ]
+                    ]
                 ]
             ];
 
-            dump($header);
+            dump($compact);
 
             return view('Process.BusinessTrip.BusinessTripRequest.Transactions.RevisionBusinessTripRequest', $compact);
         } catch (\Throwable $th) {
