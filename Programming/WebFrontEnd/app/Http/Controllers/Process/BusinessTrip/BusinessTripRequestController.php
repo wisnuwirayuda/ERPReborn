@@ -186,128 +186,62 @@ class BusinessTripRequestController extends Controller
     public function RevisionBusinessTripRequestIndex(Request $request)
     {
         try {
-            $varAPIWebToken = Session::get('SessionLogin');
-            $personBusinessTripRefID = $request->input('modal_business_trip_id');
+            $token = Session::get('SessionLogin');
+            $brfID = $request->input('modal_business_trip_id');
             $documentTypeRefID = $this->GetBusinessDocumentsTypeFromRedis('Person Business Trip Revision Form');
 
-            $response = $this->businessTripService->getDetail($personBusinessTripRefID);
+            $response = $this->businessTripService->getDetail($brfID);
 
             if ($response['metadata']['HTTPStatusCode'] !== 200) {
-                return response()->json($response);
+                throw new \Exception('Failed to fetch Detail Business Trip Request');
             }
 
-            // $responseTripSequence = $this->businessTripService->getPersonBusinessTripSequence($personBusinessTripRefID);
-
-            // if ($responseTripSequence['metadata']['HTTPStatusCode'] !== 200) {
-            //     return response()->json($responseTripSequence);
-            // }
-
-            $responseTripSequenceDetail = $this->businessTripService->getPersonBusinessTripSequenceDetail($personBusinessTripRefID);
-
-            if ($responseTripSequenceDetail['metadata']['HTTPStatusCode'] !== 200) {
-                return response()->json($responseTripSequenceDetail);
-            }
-
-            $dataResponse = $response['data']['data'];
-            // $dataTripSequence       = $responseTripSequence['data']['data'];
-            $dataTripSequenceDetail = $responseTripSequenceDetail['data']['data'];
-
-            // dump($dataResponse);
-            // dump($dataTripSequenceDetail);
+            $details = $response['data']['data'] ?? [];
+            $header = $details[0] ?? [];
 
             $compact = [
-                'varAPIWebToken' => $varAPIWebToken ?? '',
+                'varAPIWebToken' => $token,
                 'documentType_RefID' => $documentTypeRefID,
-                'combinedBudgetSectionDetail_RefID' => $dataResponse[0]['CombinedBudgetSectionDetail_RefID'],
-                'workStructure_RefID' => $dataResponse[0]['WorkStructure_RefID'] ?? '',
-                'workTemp' => $dataResponse[0]['WorkCode'] . ' - ' . $dataResponse[0]['WorkName'],
-                'product_RefID' => $dataResponse[0]['Product_RefID'] ?? '',
-                'personBusinessTripRefID' => $dataResponse[0]['PersonBusinessTrip_RefID'], // $dataTripSequence[0]['personBusinessTrip_RefID'],
-                'personBusinessTripDetailRefID' => $dataResponse[0]['Sys_ID'], // $dataTripSequence[0]['sys_ID'],
+                'businessTrip_RefID' => $header['PersonBusinessTrip_RefID'],
+                'combinedBudgetSectionDetail_RefID' => $header['CombinedBudgetSectionDetail_RefID'],
+                'workStructure_RefID' => $header['WorkStructure_RefID'],
+                'product_RefID' => $header['Product_RefID'],
+                'dateCommanceTravel' => $header['StartDateTimeTZ'],
+                'dateEndTravel' => $header['FinishDateTimeTZ'],
+                'departingFrom' => $header['DeparturePoint'],
+                'destinationTo' => $header['DestinationPoint'],
+                'reasonTravel' => $header['ReasonToTravel'],
+                'fileID' => $header['Log_FileUpload_Pointer_RefID'],
                 'budget' => [
-                    'id' => $dataResponse[0]['CombinedBudget_RefID'], // $dataTripSequence[0]['combinedBudget_RefID'][0] ?? '-',
-                    'code' => $dataResponse[0]['CombinedBudgetCode'], // $dataTripSequence[0]['combinedBudgetCode'] ?? '-',
-                    'name' => $dataResponse[0]['CombinedBudgetName'], // $dataTripSequence[0]['combinedBudgetName'] ?? '-'
+                    'id' => $header['CombinedBudget_RefID'],
+                    'code' => $header['CombinedBudgetCode'],
+                    'name' => $header['CombinedBudgetName']
                 ],
-                'subBudget' => [
-                    'id' => $dataResponse[0]['CombinedBudgetSection_RefID'], // $dataTripSequence[0]['combinedBudgetSection_RefID'][0] ?? '-',
-                    'code' => $dataResponse[0]['CombinedBudgetSectionCode'], // $dataTripSequence[0]['combinedBudgetSectionCode'] ?? '-',
-                    'name' => $dataResponse[0]['CombinedBudgetSectionName'], // $dataTripSequence[0]['combinedBudgetSectionName'] ?? '-'
+                'site' => [
+                    'id' => $header['CombinedBudgetSection_RefID'],
+                    'code' => $header['CombinedBudgetSectionCode'],
+                    'name' => $header['CombinedBudgetSectionName']
                 ],
-                'fileID' => $dataResponse[0]['Log_FileUpload_Pointer_RefID'],
                 'requester' => [
-                    'id' => $dataResponse[0]['RequesterWorkerJobsPosition_RefID'], // $dataTripSequence[0]['requesterWorkerJobsPosition_RefID'] ?? '-',
-                    'name' => $dataResponse[0]['RequesterWorkerName'], // $dataTripSequence[0]['requesterWorkerName'] ?? '-',
-                    'position' => $dataResponse[0]['RequesterWorkerPosition'],
-                    'contact' => $dataResponse[0]['RequesterWorkerContact']
-                ],
-                'dateTravel' => [
-                    'commence' => $dataResponse[0]['StartDateTimeTZ'] ? Carbon::parse($dataResponse[0]['StartDateTimeTZ'])->format('Y-m-d') : '-', // $dataTripSequence[0]['startDateTimeTZ'] ? Carbon::parse($dataTripSequence[0]['startDateTimeTZ'])->format('Y-m-d') : '-',
-                    'end' => $dataResponse[0]['FinishDateTimeTZ'] ? Carbon::parse($dataResponse[0]['FinishDateTimeTZ'])->format('Y-m-d') : '-' // $dataTripSequence[0]['finishDateTimeTZ'] ? Carbon::parse($dataTripSequence[0]['finishDateTimeTZ'])->format('Y-m-d') : '-'
-                ],
-                'departing' => [
-                    'from' => $dataResponse[0]['DeparturePoint'],
-                    'to' => $dataResponse[0]['DestinationPoint']
-                ],
-                'reason' => $dataResponse[0]['ReasonToTravel'],
-                'total' => [
-                    'brf' => $dataResponse[0]['AmountBaseCurrencyValue'], // $dataTripSequence[0]['amountBaseCurrencyValue'] ?? 0,
-                    'payment' => 118670.07,
-                ],
-                'dataTripBudgetDetails' => $dataTripSequenceDetail,
-                'payment' => [
-                    'directVendor' => [
-                        'value' => 30000.20,
-                        'bankName' => [
-                            'id' => 166000000000002,
-                            'code' => 'BRI',
-                            'name' => 'Bank Rakyat Indonesia'
-                        ],
-                        'bankAccount' => [
-                            'id' => 167000000000042,
-                            'number' => 044101001553563,
-                            'name' => 'PT QDC Technologies'
-                        ],
-                    ],
-                    'corpCard' => [
-                        'value' => 59184.20,
-                        'bankName' => [
-                            'id' => 166000000000005,
-                            'code' => 'BCA',
-                            'name' => 'Bank Central Asia'
-                        ],
-                        'bankAccount' => [
-                            'id' => 167000000000064,
-                            'number' => 5520579321,
-                            'name' => 'Belina Lindarwani'
-                        ],
-                    ],
-                    'other' => [
-                        'value' => 29485.67,
-                        'beneficiary' => [
-                            'id' => 164000000000559,
-                            'positionID' => 25000000000559,
-                            'position' => 'General Manager',
-                            'name' => 'Adhe Kurniawan'
-                        ],
-                        'bankName' => [
-                            'id' => 166000000000002,
-                            'code' => 'BRI',
-                            'name' => 'Bank Rakyat Indonesia'
-                        ],
-                        'bankAccount' => [
-                            'id' => 167000000000042,
-                            'number' => 044101001553563,
-                            'name' => 'PT QDC Technologies'
-                        ],
-                    ],
+                    'id' => $header['RequesterWorkerJobsPosition_RefID'],
+                    'position' => $header['RequesterWorkerPosition'],
+                    'contact' => $header['RequesterWorkerContact'],
+                    'name' => $header['RequesterWorkerName']
                 ]
             ];
 
+            dump($compact);
+
             return view('Process.BusinessTrip.BusinessTripRequest.Transactions.RevisionBusinessTripRequest', $compact);
         } catch (\Throwable $th) {
-            Log::error("Error at " . $th->getMessage());
-            return redirect()->back()->with('NotFound', 'Process Error');
+            Log::error('Revision Business Trip Request Index Error', [
+                'message' => $th->getMessage(),
+                'brfRefId' => $request->input('modal_business_trip_id')
+            ]);
+
+            return redirect()
+                ->route('BusinessTripRequest.index', ['var' => 1])
+                ->with('NotFound', 'Data cannot be displayed at this time. Please try again.');
         }
     }
 
