@@ -649,6 +649,8 @@
     const other = document.getElementById("other");
     const totalBRF = document.getElementById("total_business_trip");
 
+    $('#businessTripRequestFormModal').modal('show');
+
     if (isSectionValid()) {
       $("#travel_fares_modal_summary").text(decimalFormat(testing));
       $("#allowance_modal_summary").text(accommodation.value || 0.00);
@@ -871,7 +873,7 @@
     $.ajax({
       type: 'POST',
       data: form_data,
-      url: '{!! route("BusinessTripRequest.store") !!}',
+      url: '{!! route("BusinessTripRequest.UpdatesBusinessTripRequest") !!}',
       processData: false,
       contentType: false,
       success: function (res) {
@@ -899,7 +901,7 @@
             cancelForm("{{ route('BusinessTripRequest.index', ['var' => 1]) }}");
           });
         } else {
-          ErrorNotif("Create Business Trip Request Failed");
+          ErrorNotif("Revision Business Trip Request Failed");
         }
       },
       error: function (jqXHR, textStatus, errorThrown) {

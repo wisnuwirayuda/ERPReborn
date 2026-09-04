@@ -154,26 +154,27 @@ class BusinessTripRequestController extends Controller
     public function UpdatesBusinessTripRequest(Request $request)
     {
         try {
-            $response = $this->businessTripService->updates($request);
+            $response = $this->businessTripService->updates($request->all());
 
             if ($response['metadata']['HTTPStatusCode'] !== 200) {
-                return response()->json($response);
+                throw new \Exception('Failed to fetch Update Business Trip Request');
             }
 
-            $responseWorkflow = $this->workflowService->submit(
-                $response['data'][0]['businessDocument']['businessDocument_RefID'],
-                $request->workFlowPath_RefID,
-                $request->comment,
-                $request->approverEntity,
-            );
+            // $responseWorkflow = $this->workflowService->submit(
+            //     $response['data'][0]['businessDocument']['businessDocument_RefID'],
+            //     $request->workFlowPath_RefID,
+            //     $request->comment,
+            //     $request->approverEntity,
+            // );
 
-            if ($responseWorkflow['metadata']['HTTPStatusCode'] !== 200) {
-                return response()->json($responseWorkflow);
-            }
+            // if ($responseWorkflow['metadata']['HTTPStatusCode'] !== 200) {
+            //     throw new \Exception('Failed to fetch Update Workflow Business Trip Request');
+            // }
 
             $compact = [
                 "documentNumber" => $response['data'][0]['businessDocument']['documentNumber'],
-                "status" => $responseWorkflow['metadata']['HTTPStatusCode'],
+                "status" => $response['metadata']['HTTPStatusCode'],
+                // "status" => $responseWorkflow['metadata']['HTTPStatusCode'],
             ];
 
             return response()->json($compact);
@@ -210,6 +211,8 @@ class BusinessTripRequestController extends Controller
                 'varAPIWebToken' => $token,
                 'documentType_RefID' => $documentTypeRefID,
                 'businessTrip_RefID' => $header['PersonBusinessTrip_RefID'],
+                'currency_RefID' => $header['AmountCurrency_RefID'],
+                'currencyExchangeRate' => $header['AmountCurrencyExchangeRate'],
                 'combinedBudgetSectionDetail_RefID' => $header['CombinedBudgetSectionDetail_RefID'],
                 'workStructure_RefID' => $header['WorkStructure_RefID'],
                 'product_RefID' => $header['Product_RefID'],
@@ -281,8 +284,6 @@ class BusinessTripRequestController extends Controller
                     ]
                 ]
             ];
-
-            dump($compact);
 
             return view('Process.BusinessTrip.BusinessTripRequest.Transactions.RevisionBusinessTripRequest', $compact);
         } catch (\Throwable $th) {

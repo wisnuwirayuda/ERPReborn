@@ -35,6 +35,9 @@
             <input hidden id="product_RefID" name="product_RefID" value="<?= $product_RefID; ?>" />
             <input hidden id="workStructure_RefID" name="workStructure_RefID" value="<?= $workStructure_RefID; ?>" />
             <input hidden id="DocumentTypeID" name="DocumentTypeID" value="<?= $documentType_RefID; ?>">
+            <input hidden id="businessTrip_RefID" name="businessTrip_RefID" value="<?= $businessTrip_RefID; ?>">
+            <input hidden id="currency_RefID" name="currency_RefID" value="<?= $currency_RefID; ?>">
+            <input hidden id="currencyExchangeRate" name="currencyExchangeRate" value="<?= $currencyExchangeRate; ?>">
             <input hidden id="combinedBudgetSectionDetail_RefID" name="combinedBudgetSectionDetail_RefID"
               value="<?= $combinedBudgetSectionDetail_RefID; ?>" />
 
