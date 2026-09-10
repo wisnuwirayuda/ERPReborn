@@ -652,6 +652,29 @@ class CheckDocumentController extends Controller
                     ]
                 ];
                 break;
+            case "Stock Opname Form":
+                $varData = [
+                    'metadata' => [
+                        'HTTPStatusCode' => 200
+                    ],
+                    'data' => [
+                        'data' => [
+                            [
+                                'sys_ID' => 73810928,
+                                'sys_Text' => 'SC/QDC/2025/000001',
+                                'combinedBudgetCode' => 'Q000196',
+                                'combinedBudgetSectionCode' => 'Q000062 ► 235'
+                            ],
+                            [
+                                'sys_ID' => 90381924,
+                                'sys_Text' => 'SC/QDC/2025/000002',
+                                'combinedBudgetCode' => 'Q000196',
+                                'combinedBudgetSectionCode' => 'Q000062 ► 235'
+                            ],
+                        ]
+                    ]
+                ];
+                break;
             default:
                 $start = $request->input('start', 0);
                 $length = $request->input('length', 10);
@@ -700,9 +723,9 @@ class CheckDocumentController extends Controller
 
         return response()->json([
             'draw' => intval($request->input('draw')),
-            'recordsTotal' => $documentData['header']['dataCount'],
-            'recordsFiltered' => $documentData['header']['dataCount'],
-            'data' => $documentData['content']['itemList'],
+            'recordsTotal' => $documentData['header']['dataCount'] ?? 100,
+            'recordsFiltered' => $documentData['header']['dataCount'] ?? 100,
+            'data' => $documentData['content']['itemList'] ?? $documentData,
             "DocumentTypeName" => $DocumentTypeName
         ]);
     }
