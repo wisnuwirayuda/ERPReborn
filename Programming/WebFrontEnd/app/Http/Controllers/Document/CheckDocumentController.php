@@ -81,6 +81,7 @@ class CheckDocumentController extends Controller
                 $documentType === 'Sallary Allocation Form' ||
                 $documentType === 'Sales Order Form' ||
                 $documentType === 'Supplier Form' ||
+                $documentType === 'Stock Opname Form' ||
                 $documentType === 'Tax Recon Form'
             ) {
                 // JUST FOR TRIGGER, WHEN API KEY NOT READY
