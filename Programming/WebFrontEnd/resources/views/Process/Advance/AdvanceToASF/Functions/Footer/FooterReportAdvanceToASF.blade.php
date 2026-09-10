@@ -708,10 +708,24 @@
     $('#tableGetModalAdvance').on('click', 'tbody tr', async function () {
         const sysId = $(this).find('input[data-trigger="sys_id_modal_advance"]').val();
         const trano = $(this).find('td:nth-child(2)').text();
+        const budgetCode = $(this).find('td:nth-child(5)').text();
+        const budgetName = $(this).find('td:nth-child(6)').text();
+        const subBudgetCode = $(this).find('td:nth-child(7)').text();
+        const subBudgetName = $(this).find('td:nth-child(8)').text();
 
         $("#arf_id").val(sysId);
         $("#arf_number").val(trano);
         $("#arf_number").css({ "background-color": "#e9ecef" });
+
+        $("#budget_id").val(budgetCode);
+        $("#budget_code").val(budgetCode);
+        $("#budget_name").val(`${budgetCode} - ${budgetName}`);
+        $("#budget_name").css({ "background-color": "#e9ecef" });
+
+        $("#sub_budget_id").val(subBudgetCode);
+        $("#sub_budget_code").val(subBudgetCode);
+        $("#sub_budget_name").val(`${subBudgetCode} - ${subBudgetName}`);
+        $("#sub_budget_name").css({ "background-color": "#e9ecef" });
 
         $("#myGetModalAdvance").modal('toggle');
     });
@@ -719,10 +733,24 @@
     $('#tableGetModalAdvanceSettlement').on('click', 'tbody tr', function () {
         const sysId = $(this).find('input[data-trigger="sys_id_modal_advance_settlement"]').val();
         const trano = $(this).find('td:nth-child(2)').text();
+        const budgetCode = $(this).find('td:nth-child(3)').text();
+        const budgetName = $(this).find('td:nth-child(4)').text();
+        const subBudgetCode = $(this).find('td:nth-child(5)').text();
+        const subBudgetName = $(this).find('td:nth-child(6)').text();
 
         $("#asf_id").val(sysId);
         $("#asf_number").val(trano);
         $("#asf_number").css({ "background-color": "#e9ecef" });
+
+        $("#budget_id").val(budgetCode);
+        $("#budget_code").val(budgetCode);
+        $("#budget_name").val(`${budgetCode} - ${budgetName}`);
+        $("#budget_name").css({ "background-color": "#e9ecef" });
+
+        $("#sub_budget_id").val(subBudgetCode);
+        $("#sub_budget_code").val(subBudgetCode);
+        $("#sub_budget_name").val(`${subBudgetCode} - ${subBudgetName}`);
+        $("#sub_budget_name").css({ "background-color": "#e9ecef" });
 
         $('#myGetModalAdvanceSettlement').modal('toggle');
     });
