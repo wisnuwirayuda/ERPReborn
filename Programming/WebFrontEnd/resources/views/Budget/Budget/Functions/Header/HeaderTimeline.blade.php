@@ -9,6 +9,9 @@
               <tr>
                 <th
                   style="padding-top: 10px;padding-bottom: 10px;border-right:1px solid #e9ecef;text-align: center;background-color: #4B586A;color: #fff;">
+                  Sub Budget</th>
+                <th
+                  style="padding-top: 10px;padding-bottom: 10px;border-right:1px solid #e9ecef;text-align: center;background-color: #4B586A;color: #fff;">
                   Work ID</th>
                 <th
                   style="padding-top: 10px;padding-bottom: 10px;border-right:1px solid #e9ecef;text-align: center;background-color: #4B586A;color: #fff;">
