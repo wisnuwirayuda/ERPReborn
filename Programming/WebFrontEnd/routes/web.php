@@ -218,6 +218,7 @@ Route::group(['middleware' => ['prevent-back-history', 'SessionLogin']], functio
     Route::resource('BudgetProgress', 'Budget\BudgetProgressController');
 
     // FUNCTION
+    Route::get('render-file-upload', 'Function\FunctionController@renderFileUpload')->name('renderFileUpload');
     Route::post('getQuantityUnit', 'Function\FunctionController@getQuantityUnit')->name('getQuantityUnit');
     Route::get('getInstitutionType', 'Function\FunctionController@getInstitutionType')->name('getInstitutionType');
     Route::get('getProject', 'Function\FunctionController@getProject')->name('getProject');
