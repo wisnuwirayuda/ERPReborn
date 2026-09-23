@@ -47,10 +47,10 @@
         </div>
       </div>
 
-      <!-- FILE ATTACHMENT -->
+      <!-- ADVANCE FILES -->
       <div class="row">
         <label class="col-sm-3 col-md-4 col-lg-4 col-form-label p-0">
-          File Attachment
+          Advance Files
         </label>
         <div class="col-sm-9 col-md-8 col-lg-7 d-flex p-0">
           <div id="fileUploadContainer">-</div>
