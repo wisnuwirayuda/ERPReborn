@@ -56,15 +56,9 @@
                                                 </select>
                                                 entries
                                             </label>
-                                            <!-- <label>
-                                                                                                                    Search:
-                                                                                                                    <input type="text" id="searchInput" autocomplete="off"
-                                                                                                                        placeholder="Search..."
-                                                                                                                        style="border: 1px solid #aaa; border-radius: 3px; padding: 5px; margin-left: 3px; background: transparent;" />
-                                                                                                                </label> -->
                                         </div>
 
-                                        <div class="table-responsive">
+                                        <div class="table-scroll-wrapper" id="tableScrollWrapper">
                                             <table class="table table-head-fixed text-wrap" id="table_summary">
                                                 <thead>
                                                     <tr>
