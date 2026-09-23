@@ -74,7 +74,7 @@
                 [10, 20, 50, 100, -1],
                 [10, 20, 50, 100, "All"]
             ],
-            pageLength: 20,
+            pageLength: 10,
             ajax: {
                 type: 'POST',
                 url: '{!! route("AdvanceRequest.ReportAdvanceSummaryStore") !!}',
@@ -108,6 +108,10 @@
                 },
                 beforeSend: function () {
                     Utils.showLoading();
+
+                    totalIDR = 0;
+                    totalOtherCurrency = 0;
+                    totalEquivalentIDR = 0;
 
                     $('#table_summary tbody').empty();
                     $('#table_container').css("display", "none");
