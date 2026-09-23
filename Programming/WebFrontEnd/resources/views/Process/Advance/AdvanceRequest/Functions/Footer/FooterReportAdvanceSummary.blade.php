@@ -129,7 +129,6 @@
             scrollY: `${TABLE_SCROLL_Y_PX}px`,
             scrollCollapse: true,
             scrollX: false,
-
             ajax: {
                 type: 'POST',
                 url: '{!! route("AdvanceRequest.ReportAdvanceSummaryStore") !!}',
@@ -214,7 +213,7 @@
                     className: "text-nowrap",
                 },
                 {
-                    data: null,
+                    data: 'currencyCode',
                     defaultContent: '-',
                     className: "text-nowrap",
                 },
