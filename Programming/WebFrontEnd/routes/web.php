@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Function\FunctionController;
 use App\Http\Controllers\Purchase\PurchaseOrderController;
 use App\Http\Controllers\Purchase\PurchaseRequisitionController;
 
@@ -219,56 +220,155 @@ Route::group(['middleware' => ['prevent-back-history', 'SessionLogin']], functio
     Route::post('BudgetProgress/revision', 'Budget\BudgetProgressController@revision')->name('BudgetProgress.revision');
     Route::resource('BudgetProgress', 'Budget\BudgetProgressController');
 
-    // FUNCTION
-    Route::get('render-file-upload', 'Function\FunctionController@renderFileUpload')->name('renderFileUpload');
-    Route::post('getQuantityUnit', 'Function\FunctionController@getQuantityUnit')->name('getQuantityUnit');
-    Route::get('getInstitutionType', 'Function\FunctionController@getInstitutionType')->name('getInstitutionType');
-    Route::get('getProject', 'Function\FunctionController@getProject')->name('getProject');
-    Route::get('getRequester', 'Function\FunctionController@getRequester')->name('getRequester');
-    Route::get('getBeneficiary', 'Function\FunctionController@getBeneficiary')->name('getBeneficiary');
-    Route::get('getPurchaseRequisitionByBudgetID', 'Function\FunctionController@getPurchaseRequisitionByBudgetID')->name('getPurchaseRequisitionByBudgetID');
-    Route::get('getSite', 'Function\FunctionController@getSite')->name('getSite');
-    Route::get('getNewSite', 'Function\FunctionController@getNewSite')->name('getNewSite');
-    Route::get('getBudget', 'Function\FunctionController@getBudget')->name('getBudget');
-    Route::get('getCreditNoteList', 'Function\FunctionController@getCreditNoteList')->name('getCreditNoteList');
-    Route::get('getCustomerList', 'Function\FunctionController@getCustomerList')->name('getCustomerList');
-    Route::get('getChartOfAccountList', 'Function\FunctionController@getChartOfAccountList')->name('getChartOfAccountList');
-    Route::get('getInvoiceList', 'Function\FunctionController@getInvoiceList')->name('getInvoiceList');
-    Route::get('getAdvanceSettlement', 'Function\FunctionController@getAdvanceSettlement')->name('getAdvanceSettlement');
-    Route::get('getAdvanceDetail', 'Function\FunctionController@getAdvanceDetail')->name('getAdvanceDetail');
-    Route::get('getDeliveryOrderDetail', 'Function\FunctionController@getDeliveryOrderDetail')->name('getDeliveryOrderDetail');
-    Route::get('getLoanList', 'Function\FunctionController@getLoanList')->name('getLoanList');
-    Route::get('getPurchaseRequisitionDetail', 'Function\FunctionController@getPurchaseRequisitionDetail')->name('getPurchaseRequisitionDetail');
-    Route::get('getPaymentTerm', 'Function\FunctionController@getPaymentTerm')->name('getPaymentTerm');
-    Route::get('getVAT', 'Function\FunctionController@getVAT')->name('getVAT');
-    Route::get('getTimesheetList', 'Function\FunctionController@getTimesheetList')->name('getTimesheetList');
-    Route::get('getPurchaseOrderDetail', 'Function\FunctionController@getPurchaseOrderDetail')->name('getPurchaseOrderDetail');
-    Route::get('getBusinessTripCostComponentEntityNew', 'Function\FunctionController@getBusinessTripCostComponentEntityNew')->name('getBusinessTripCostComponentEntityNew');
-    Route::get('getPerson', 'Function\FunctionController@getPerson')->name('getPerson');
-    Route::get('getBank', 'Function\FunctionController@getBank')->name('getBank');
-    Route::get('getBankList', 'Function\FunctionController@getBankList')->name('getBankList');
-    Route::get('getBankAccount', 'Function\FunctionController@getBankAccount')->name('getBankAccount');
-    Route::get('getEntityBankAccount', 'Function\FunctionController@getEntityBankAccount')->name('getEntityBankAccount');
-    Route::get('getProduct', 'Function\FunctionController@getProduct')->name('getProduct');
-    Route::get('getWorker', 'Function\FunctionController@getWorker')->name('getWorker');
-    Route::get('getDeliverTo', 'Function\FunctionController@getDeliverTo')->name('getDeliverTo');
-    Route::get('getWarehouse', 'Function\FunctionController@getWarehouse')->name('getWarehouse');
-    Route::get('getBusinessTripCostComponentEntity', 'Function\FunctionController@getBusinessTripCostComponentEntity')->name('getBusinessTripCostComponentEntity');
-    Route::get('getDocumentType', 'Function\FunctionController@getDocumentType')->name('getDocumentType');
-    Route::get('getCurrency', 'Function\FunctionController@getCurrency')->name('getCurrency');
-    Route::post('getDepartment', 'Function\FunctionController@getDepartment')->name('getDepartment');
-    Route::post('getRole', 'Function\FunctionController@getRole')->name('getRole');
-    Route::get('getMenuGroup', 'Function\FunctionController@getMenuGroup')->name('getMenuGroup');
-    Route::get('getSubMenu', 'Function\FunctionController@getSubMenu')->name('getSubMenu');
-    Route::get('getOneSubMenu', 'Function\FunctionController@getOneSubMenu')->name('getOneSubMenu');
-    Route::post('getTransporter', 'Function\FunctionController@getTransporter')->name('getTransporter');
-    Route::get('getListTransactionByDocumentTypeID', 'Function\FunctionController@getListTransactionByDocumentTypeID')->name('getListTransactionByDocumentTypeID');
-    Route::get('getAssetCategory', 'Function\FunctionController@getAssetCategory')->name('getAssetCategory');
-    Route::get('getInstitutionBankAccount', 'Function\FunctionController@getInstitutionBankAccount')->name('getInstitutionBankAccount');
-    Route::get('getDepreciationMethod', 'Function\FunctionController@getDepreciationMethod')->name('getDepreciationMethod');
-    Route::get('getDepreciationRateYears', 'Function\FunctionController@getDepreciationRateYears')->name('getDepreciationRateYears');
-    Route::get('getBusinessDocumentTypeSendRedis', 'Function\FunctionController@getBusinessDocumentTypeSendRedis')->name('getBusinessDocumentTypeSendRedis');
-    Route::get('getBusinessDocumentIssuanceDispositionCount', 'Function\FunctionController@getBusinessDocumentIssuanceDispositionCount')->name('getBusinessDocumentIssuanceDispositionCount');
+    // FUNCTION CONTROLLER
+    Route::controller(FunctionController::class)->group(function () {
+        Route::get('render-file-upload', 'renderFileUpload')
+            ->name('renderFileUpload');
+
+        Route::post('getQuantityUnit', 'getQuantityUnit')
+            ->name('getQuantityUnit');
+
+        Route::get('getInstitutionType', 'getInstitutionType')
+            ->name('getInstitutionType');
+
+        Route::get('getProject', 'getProject')
+            ->name('getProject');
+
+        Route::get('getRequester', 'getRequester')
+            ->name('getRequester');
+
+        Route::get('getBeneficiary', 'getBeneficiary')
+            ->name('getBeneficiary');
+
+        Route::get('getPurchaseRequisitionByBudgetID', 'getPurchaseRequisitionByBudgetID')
+            ->name('getPurchaseRequisitionByBudgetID');
+
+        Route::get('getSite', 'getSite')
+            ->name('getSite');
+
+        Route::get('getNewSite', 'getNewSite')
+            ->name('getNewSite');
+
+        Route::get('getBudget', 'getBudget')
+            ->name('getBudget');
+
+        Route::get('getCreditNoteList', 'getCreditNoteList')
+            ->name('getCreditNoteList');
+
+        Route::get('getCustomerList', 'getCustomerList')
+            ->name('getCustomerList');
+
+        Route::get('getChartOfAccountList', 'getChartOfAccountList')
+            ->name('getChartOfAccountList');
+
+        Route::get('getInvoiceList', 'getInvoiceList')
+            ->name('getInvoiceList');
+
+        Route::get('getAdvanceSettlement', 'getAdvanceSettlement')
+            ->name('getAdvanceSettlement');
+
+        Route::get('getAdvanceDetail', 'getAdvanceDetail')
+            ->name('getAdvanceDetail');
+
+        Route::get('getDeliveryOrderDetail', 'getDeliveryOrderDetail')
+            ->name('getDeliveryOrderDetail');
+
+        Route::get('getLoanList', 'getLoanList')
+            ->name('getLoanList');
+
+        Route::get('getPurchaseRequisitionDetail', 'getPurchaseRequisitionDetail')
+            ->name('getPurchaseRequisitionDetail');
+
+        Route::get('getPaymentTerm', 'getPaymentTerm')
+            ->name('getPaymentTerm');
+
+        Route::get('getVAT', 'getVAT')
+            ->name('getVAT');
+
+        Route::get('getTimesheetList', 'getTimesheetList')
+            ->name('getTimesheetList');
+
+        Route::get('getPurchaseOrderDetail', 'getPurchaseOrderDetail')
+            ->name('getPurchaseOrderDetail');
+
+        Route::get('getBusinessTripCostComponentEntityNew', 'getBusinessTripCostComponentEntityNew')
+            ->name('getBusinessTripCostComponentEntityNew');
+
+        Route::get('getPerson', 'getPerson')
+            ->name('getPerson');
+
+        Route::get('getBank', 'getBank')
+            ->name('getBank');
+
+        Route::get('getBankList', 'getBankList')
+            ->name('getBankList');
+
+        Route::get('getBankAccount', 'getBankAccount')
+            ->name('getBankAccount');
+
+        Route::get('getEntityBankAccount', 'getEntityBankAccount')
+            ->name('getEntityBankAccount');
+
+        Route::get('getProduct', 'getProduct')
+            ->name('getProduct');
+
+        Route::get('getWorker', 'getWorker')
+            ->name('getWorker');
+
+        Route::get('getDeliverTo', 'getDeliverTo')
+            ->name('getDeliverTo');
+
+        Route::get('getWarehouse', 'getWarehouse')
+            ->name('getWarehouse');
+
+        Route::get('getBusinessTripCostComponentEntity', 'getBusinessTripCostComponentEntity')
+            ->name('getBusinessTripCostComponentEntity');
+
+        Route::get('getDocumentType', 'getDocumentType')
+            ->name('getDocumentType');
+
+        Route::get('getCurrency', 'getCurrency')
+            ->name('getCurrency');
+
+        Route::post('getDepartment', 'getDepartment')
+            ->name('getDepartment');
+
+        Route::post('getRole', 'getRole')
+            ->name('getRole');
+
+        Route::get('getMenuGroup', 'getMenuGroup')
+            ->name('getMenuGroup');
+
+        Route::get('getSubMenu', 'getSubMenu')
+            ->name('getSubMenu');
+
+        Route::get('getOneSubMenu', 'getOneSubMenu')
+            ->name('getOneSubMenu');
+
+        Route::post('getTransporter', 'getTransporter')
+            ->name('getTransporter');
+
+        Route::get('getListTransactionByDocumentTypeID', 'getListTransactionByDocumentTypeID')
+            ->name('getListTransactionByDocumentTypeID');
+
+        Route::get('getAssetCategory', 'getAssetCategory')
+            ->name('getAssetCategory');
+
+        Route::get('getInstitutionBankAccount', 'getInstitutionBankAccount')
+            ->name('getInstitutionBankAccount');
+
+        Route::get('getDepreciationMethod', 'getDepreciationMethod')
+            ->name('getDepreciationMethod');
+
+        Route::get('getDepreciationRateYears', 'getDepreciationRateYears')
+            ->name('getDepreciationRateYears');
+
+        Route::get('getBusinessDocumentTypeSendRedis', 'getBusinessDocumentTypeSendRedis')
+            ->name('getBusinessDocumentTypeSendRedis');
+
+        Route::get('getBusinessDocumentIssuanceDispositionCount', 'getBusinessDocumentIssuanceDispositionCount')
+            ->name('getBusinessDocumentIssuanceDispositionCount');
+    });
 
     // ACCOUNT PAYABLE
     Route::get('AccountPayable/detail', 'Finance\AccountPayableController@AccountPayableDetail')->name('AccountPayable.Detail');
