@@ -83,11 +83,17 @@
     }
 
     function resetForm() {
+        dataReport = [];
+        
+        $('#table_container').hide();
+
         $("#budget_name").css('background-color', '#fff');
         $(`#budget_name`).val("");
         $(`#budget_id`).val("");
         $(`#budget_code`).val("");
 
+        $("#mySitesTrigger").prop("disabled", true);
+        $("#mySitesTrigger").css({ "cursor": "not-allowed" });
         $("#sub_budget_name").css('background-color', '#fff');
         $(`#sub_budget_name`).val("");
         $(`#sub_budget_id`).val("");
@@ -188,38 +194,40 @@
                 {
                     data: 'advanceNumber',
                     defaultContent: '-',
-                    className: "text-nowrap",
+                    className: "text-wrap"
                 },
                 {
                     data: null,
                     defaultContent: '-',
-                    className: "text-nowrap",
+                    className: "text-wrap",
                     render: function (data, type, row, meta) {
                         return `${data.combinedBudgetSectionCode} - ${data.combinedBudgetSectionName}`;
                     }
                 },
                 {
                     data: 'advanceDate',
-                    defaultContent: '-'
+                    defaultContent: '-',
+                    className: "text-wrap"
                 },
                 {
                     data: 'requesterName',
                     defaultContent: '-',
-                    className: "text-nowrap",
+                    className: "text-wrap"
                 },
                 {
                     data: 'beneficiaryName',
                     defaultContent: '-',
-                    className: "text-nowrap",
+                    className: "text-wrap"
                 },
                 {
                     data: 'currencyCode',
                     defaultContent: '-',
-                    className: "text-nowrap",
+                    className: "text-wrap"
                 },
                 {
                     data: null,
                     defaultContent: '-',
+                    className: "text-wrap",
                     render: function (data, type, row, meta) {
                         return currencyTotal(data.total_IDR || '0');
                     }
@@ -227,6 +235,7 @@
                 {
                     data: null,
                     defaultContent: '-',
+                    className: "text-wrap",
                     render: function (data, type, row, meta) {
                         return currencyTotal(data.total_Other_Currency || '0');
                     }
@@ -234,13 +243,15 @@
                 {
                     data: null,
                     defaultContent: '-',
+                    className: "text-wrap",
                     render: function (data, type, row, meta) {
                         return currencyTotal(data.total_Equivalent_IDR || '0');
                     }
                 },
                 {
                     data: 'remarks',
-                    defaultContent: '-'
+                    defaultContent: '-',
+                    className: "text-wrap"
                 }
             ],
             drawCallback: function (settings) {

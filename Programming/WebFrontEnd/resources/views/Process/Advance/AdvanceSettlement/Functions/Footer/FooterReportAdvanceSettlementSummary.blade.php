@@ -81,11 +81,17 @@
     }
 
     function resetForm() {
+        dataReport = [];
+
+        $('#table_container').hide();
+
         $("#budget_name").css('background-color', '#fff');
         $(`#budget_name`).val("");
         $(`#budget_id`).val("");
         $(`#budget_code`).val("");
 
+        $("#mySitesTrigger").prop("disabled", true);
+        $("#mySitesTrigger").css({ "cursor": "not-allowed" });
         $("#site_name").css('background-color', '#fff');
         $(`#site_name`).val("");
         $(`#site_id`).val("");
