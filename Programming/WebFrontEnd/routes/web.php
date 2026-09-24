@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Function\FunctionController;
+use App\Http\Controllers\Finance\AccountPayableController;
 use App\Http\Controllers\Purchase\PurchaseOrderController;
 use App\Http\Controllers\Purchase\PurchaseRequisitionController;
 
@@ -371,14 +372,29 @@ Route::group(['middleware' => ['prevent-back-history', 'SessionLogin']], functio
     });
 
     // ACCOUNT PAYABLE
-    Route::get('AccountPayable/detail', 'Finance\AccountPayableController@AccountPayableDetail')->name('AccountPayable.Detail');
-    Route::get('AccountPayable/picklist', 'Finance\AccountPayableController@DataPickLists')->name('AccountPayable.DataPickLists');
-    Route::post('AccountPayable/revision', 'Finance\AccountPayableController@RevisionAccountPayable')->name('AccountPayable.RevisionAccountPayable');
-    Route::post('AccountPayable/update', 'Finance\AccountPayableController@UpdatesRevisionAccountPayable')->name('AccountPayable.UpdatesRevisionAccountPayable');
-    Route::get('ReportAccountPayableSummary', 'Finance\AccountPayableController@ReportAccountPayableSummary')->name('AccountPayable.ReportAccountPayableSummary');
-    Route::post('AccountPayable/report/summary/store', 'Finance\AccountPayableController@ReportAccountPayableSummaryStore')->name('AccountPayable.ReportAccountPayableSummaryStore');
-    Route::post('AccountPayable/report/summary/export', 'Finance\AccountPayableController@PrintExportReportAccountPayableSummary')->name('AccountPayable.PrintExportReportAccountPayableSummary');
-    Route::resource('AccountPayable', 'Finance\AccountPayableController')->only(['index', 'store']);
+    Route::controller(AccountPayableController::class)->group(function () {
+        Route::get('AccountPayable/detail', 'AccountPayableDetail')
+            ->name('AccountPayable.Detail');
+
+        Route::get('AccountPayable/picklist', 'DataPickLists')
+            ->name('AccountPayable.DataPickLists');
+
+        Route::post('AccountPayable/revision', 'RevisionAccountPayable')
+            ->name('AccountPayable.RevisionAccountPayable');
+
+        Route::post('AccountPayable/update', 'UpdatesRevisionAccountPayable')
+            ->name('AccountPayable.UpdatesRevisionAccountPayable');
+
+        Route::get('ReportAccountPayableSummary', 'ReportAccountPayableSummary')
+            ->name('AccountPayable.ReportAccountPayableSummary');
+
+        Route::post('AccountPayable/report/summary/store', 'ReportAccountPayableSummaryStore')
+            ->name('AccountPayable.ReportAccountPayableSummaryStore');
+
+        Route::post('AccountPayable/report/summary/export', 'PrintExportReportAccountPayableSummary')
+            ->name('AccountPayable.PrintExportReportAccountPayableSummary');
+    });
+    Route::resource('AccountPayable', AccountPayableController::class)->only(['index', 'store']);
 
     // FINANCIAL REPORT
     Route::get('ReportProfitLoss', 'Finance\FinancialReportController@ReportProfitLoss')->name('FinancialReport.ReportProfitLoss');
