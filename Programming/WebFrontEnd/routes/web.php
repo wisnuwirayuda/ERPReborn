@@ -2,8 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\UserController;
-
+use App\Http\Controllers\Purchase\PurchaseOrderController;
+use App\Http\Controllers\Purchase\PurchaseRequisitionController;
 
 /*
 |-------------------------------------------------------------------------- 
@@ -399,40 +399,103 @@ Route::group(['middleware' => ['prevent-back-history', 'SessionLogin']], functio
     Route::resource('Invoice', 'Finance\InvoiceController');
 
     // PURCHASE REQUISITION
-    Route::get('PurchaseRequisition/picklist', 'Purchase\PurchaseRequisitionController@PurchaseRequisitionPickList')->name('PurchaseRequisition.PurchaseRequisitionPickList');
-    Route::post('PurchaseRequisition/revision', 'Purchase\PurchaseRequisitionController@RevisionPurchaseRequest')->name('PurchaseRequisition.RevisionPurchaseRequest');
-    Route::post('PurchaseRequisition/updates', 'Purchase\PurchaseRequisitionController@UpdatePurchaseRequest')->name('PurchaseRequisition.UpdatePurchaseRequest');
-    Route::get('ReportPurchaseRequisitionSummary', 'Purchase\PurchaseRequisitionController@ReportPurchaseRequisitionSummary')->name('PurchaseRequisition.ReportPurchaseRequisitionSummary');
-    Route::post('PurchaseRequisition/report/summary/store ReportPurchaseRequisitionSummaryStore', 'Purchase\PurchaseRequisitionController@ReportPurchaseRequisitionSummaryStore')->name('PurchaseRequisition.ReportPurchaseRequisitionSummaryStore');
-    Route::post('PurchaseRequisition/report/summary/export', 'Purchase\PurchaseRequisitionController@PrintExportReportPurchaseRequisitionSummary')->name('PurchaseRequisition.PrintExportReportPurchaseRequisitionSummary');
-    Route::get('ReportPurchaseRequisitionDetail', 'Purchase\PurchaseRequisitionController@ReportPurchaseRequisitionDetail')->name('PurchaseRequisition.ReportPurchaseRequisitionDetail');
-    Route::post('PurchaseRequisition/report/detail/store', 'Purchase\PurchaseRequisitionController@ReportPurchaseRequisitionDetailStore')->name('PurchaseRequisition.ReportPurchaseRequisitionDetailStore');
-    Route::post('PurchaseRequisition/report/detail/export', 'Purchase\PurchaseRequisitionController@PrintExportReportPurchaseRequisitionDetail')->name('PurchaseRequisition.PrintExportReportPurchaseRequisitionDetail');
-    Route::get('ReportPRtoPO', 'Purchase\PurchaseRequisitionController@ReportPRtoPO')->name('PurchaseRequisition.ReportPRtoPO');
-    Route::post('PurchaseRequisition/report/to-purchase-order/store', 'Purchase\PurchaseRequisitionController@ReportPRtoPOStore')->name('PurchaseRequisition.ReportPRtoPOStore');
-    Route::post('PurchaseRequisition/report/to-purchase-order/export', 'Purchase\PurchaseRequisitionController@PrintExportReportPRtoPO')->name('PurchaseRequisition.PrintExportReportPRtoPO');
-    Route::resource('PurchaseRequisition', 'Purchase\PurchaseRequisitionController')->only(['index', 'store']);
+    Route::controller(PurchaseRequisitionController::class)->group(function () {
+        Route::get('PurchaseRequisition/picklist', 'PurchaseRequisitionPickList')
+            ->name('PurchaseRequisition.PurchaseRequisitionPickList');
+
+        Route::post('PurchaseRequisition/revision', 'RevisionPurchaseRequest')
+            ->name('PurchaseRequisition.RevisionPurchaseRequest');
+
+        Route::post('PurchaseRequisition/updates', 'UpdatePurchaseRequest')
+            ->name('PurchaseRequisition.UpdatePurchaseRequest');
+
+        Route::get('ReportPurchaseRequisitionSummary', 'ReportPurchaseRequisitionSummary')
+            ->name('PurchaseRequisition.ReportPurchaseRequisitionSummary');
+
+        Route::post('PurchaseRequisition/report/summary/store', 'ReportPurchaseRequisitionSummaryStore')
+            ->name('PurchaseRequisition.ReportPurchaseRequisitionSummaryStore');
+
+        Route::post('PurchaseRequisition/report/summary/export', 'PrintExportReportPurchaseRequisitionSummary')
+            ->name('PurchaseRequisition.PrintExportReportPurchaseRequisitionSummary');
+
+        Route::get('ReportPurchaseRequisitionDetail', 'ReportPurchaseRequisitionDetail')
+            ->name('PurchaseRequisition.ReportPurchaseRequisitionDetail');
+
+        Route::post('PurchaseRequisition/report/detail/store', 'ReportPurchaseRequisitionDetailStore')
+            ->name('PurchaseRequisition.ReportPurchaseRequisitionDetailStore');
+
+        Route::post('PurchaseRequisition/report/detail/export', 'PrintExportReportPurchaseRequisitionDetail')
+            ->name('PurchaseRequisition.PrintExportReportPurchaseRequisitionDetail');
+
+        Route::get('ReportPRtoPO', 'ReportPRtoPO')
+            ->name('PurchaseRequisition.ReportPRtoPO');
+
+        Route::post('PurchaseRequisition/report/to-purchase-order/store', 'ReportPRtoPOStore')
+            ->name('PurchaseRequisition.ReportPRtoPOStore');
+
+        Route::post('PurchaseRequisition/report/to-purchase-order/export', 'PrintExportReportPRtoPO')
+            ->name('PurchaseRequisition.PrintExportReportPRtoPO');
+    });
+    Route::resource('PurchaseRequisition', PurchaseRequisitionController::class)->only(['index', 'store']);
 
     // PURCHASE ORDER
-    Route::get('PurchaseOrder/picklist', 'Purchase\PurchaseOrderController@picklist')->name('PurchaseOrder.picklist');
-    Route::post('UpdatePurchaseOrder', 'Purchase\PurchaseOrderController@UpdatePurchaseOrder')->name('PurchaseOrder.UpdatePurchaseOrder');
-    Route::post('RevisionPurchaseOrder', 'Purchase\PurchaseOrderController@RevisionPurchaseOrderIndex')->name('PurchaseOrder.RevisionPurchaseOrder');
-    Route::get('ReportPurchaseOrderSummary', 'Purchase\PurchaseOrderController@ReportPurchaseOrderSummary')->name('PurchaseOrder.ReportPurchaseOrderSummary');
-    Route::post('ReportPurchaseOrderSummaryStore', 'Purchase\PurchaseOrderController@ReportPurchaseOrderSummaryStore')->name('PurchaseOrder.ReportPurchaseOrderSummaryStore');
-    Route::post('PrintExportReportPurchaseOrderSummary', 'Purchase\PurchaseOrderController@PrintExportReportPurchaseOrderSummary')->name('PurchaseOrder.PrintExportReportPurchaseOrderSummary');
-    Route::get('ReportPurchaseOrderDetail', 'Purchase\PurchaseOrderController@ReportPoDetail')->name('PurchaseOrder.ReportPurchaseOrderDetail');
-    Route::get('ReportPOtoDO', 'Purchase\PurchaseOrderController@ReportPOtoDO')->name('PurchaseOrder.ReportPOtoDO');
-    Route::post('ReportPOtoDOStore', 'Purchase\PurchaseOrderController@ReportPOtoDOStore')->name('PurchaseOrder.ReportPOtoDOStore');
-    Route::post('PrintExportReportPOtoDO', 'Purchase\PurchaseOrderController@PrintExportReportPOtoDO')->name('PurchaseOrder.PrintExportReportPOtoDO');
-    Route::get('ReportPOtoAP', 'Purchase\PurchaseOrderController@ReportPOtoAP')->name('PurchaseOrder.ReportPOtoAP');
-    Route::post('ReportPOtoAPStore', 'Purchase\PurchaseOrderController@ReportPOtoAPStore')->name('PurchaseOrder.ReportPOtoAPStore');
-    Route::post('PrintExportReportPOtoAP', 'Purchase\PurchaseOrderController@PrintExportReportPOtoAP')->name('PurchaseOrder.PrintExportReportPOtoAP');
-    Route::get('ReportCFS', 'Purchase\PurchaseOrderController@ReportCFS')->name('PurchaseOrder.ReportCFS');
-    Route::post('ReportCFSStore', 'Purchase\PurchaseOrderController@ReportCFSStore')->name('PurchaseOrder.ReportCFSStore');
-    Route::post('PrintExportReportCFS', 'Purchase\PurchaseOrderController@PrintExportReportCFS')->name('PurchaseOrder.PrintExportReportCFS');
-    Route::post('ReportPurchaseOrderDetailStore', 'Purchase\PurchaseOrderController@ReportPurchaseOrderDetailStore')->name('PurchaseOrder.ReportPurchaseOrderDetailStore');
-    Route::post('PrintExportReportPurchaseOrderDetail', 'Purchase\PurchaseOrderController@PrintExportReportPurchaseOrderDetail')->name('PurchaseOrder.PrintExportReportPurchaseOrderDetail');
-    Route::resource('PurchaseOrder', 'Purchase\PurchaseOrderController')->only(['index', 'store', 'update']);
+    Route::controller(PurchaseOrderController::class)->group(function () {
+        Route::get('PurchaseOrder/picklist', 'picklist')
+            ->name('PurchaseOrder.picklist');
+
+        Route::post('UpdatePurchaseOrder', 'UpdatePurchaseOrder')
+            ->name('PurchaseOrder.UpdatePurchaseOrder');
+
+        Route::post('RevisionPurchaseOrder', 'RevisionPurchaseOrder')
+            ->name('PurchaseOrder.RevisionPurchaseOrder');
+
+        Route::get('ReportPurchaseOrderSummary', 'ReportPurchaseOrderSummary')
+            ->name('PurchaseOrder.ReportPurchaseOrderSummary');
+
+        Route::post('ReportPurchaseOrderSummaryStore', 'ReportPurchaseOrderSummaryStore')
+            ->name('PurchaseOrder.ReportPurchaseOrderSummaryStore');
+
+        Route::post('PrintExportReportPurchaseOrderSummary', 'PrintExportReportPurchaseOrderSummary')
+            ->name('PurchaseOrder.PrintExportReportPurchaseOrderSummary');
+
+        Route::get('ReportPurchaseOrderDetail', 'ReportPoDetail')
+            ->name('PurchaseOrder.ReportPurchaseOrderDetail');
+
+        Route::post('ReportPurchaseOrderDetailStore', 'ReportPurchaseOrderDetailStore')
+            ->name('PurchaseOrder.ReportPurchaseOrderDetailStore');
+
+        Route::post('PrintExportReportPurchaseOrderDetail', 'PrintExportReportPurchaseOrderDetail')
+            ->name('PurchaseOrder.PrintExportReportPurchaseOrderDetail');
+
+        Route::get('ReportPOtoDO', 'ReportPOtoDO')
+            ->name('PurchaseOrder.ReportPOtoDO');
+
+        Route::post('ReportPOtoDOStore', 'ReportPOtoDOStore')
+            ->name('PurchaseOrder.ReportPOtoDOStore');
+
+        Route::post('PrintExportReportPOtoDO', 'PrintExportReportPOtoDO')
+            ->name('PurchaseOrder.PrintExportReportPOtoDO');
+
+        Route::get('ReportPOtoAP', 'ReportPOtoAP')
+            ->name('PurchaseOrder.ReportPOtoAP');
+
+        Route::post('ReportPOtoAPStore', 'ReportPOtoAPStore')
+            ->name('PurchaseOrder.ReportPOtoAPStore');
+
+        Route::post('PrintExportReportPOtoAP', 'PrintExportReportPOtoAP')
+            ->name('PurchaseOrder.PrintExportReportPOtoAP');
+
+        Route::get('ReportCFS', 'ReportCFS')
+            ->name('PurchaseOrder.ReportCFS');
+
+        Route::post('ReportCFSStore', 'ReportCFSStore')
+            ->name('PurchaseOrder.ReportCFSStore');
+
+        Route::post('PrintExportReportCFS', 'PrintExportReportCFS')
+            ->name('PurchaseOrder.PrintExportReportCFS');
+    });
+
+    Route::resource('PurchaseOrder', PurchaseOrderController::class)->only(['index', 'store', 'update']);
 
     // LOAN
     // Route::get('LoanListData', 'Process\Loan\LoanController@LoanListData')->name('Loan.LoanListData');
