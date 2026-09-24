@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verify PO</title>
+
+    <!-- Sweetalert -->
+    <link rel="stylesheet" href="{{ asset('AdminLTE-master/dist/css/adminltesweatalert.min.css') }}">
+
     <style>
         :root {
             --page-bg: #f7f5f0;
@@ -16,6 +20,9 @@
             --success-bg: #e8f6ef;
             --success-border: #c5e7d5;
             --success: #087344;
+            --error-bg: #fef2f2;
+            --error-border: #fecaca;
+            --error: #b91c1c;
             --avatar-bg: #e9eefb;
             --avatar-text: #294a9b;
         }
@@ -203,6 +210,66 @@
             color: #326650;
         }
 
+        .error-card {
+            min-height: 80px;
+            padding: 13px 19px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: var(--error-bg);
+            border: 1px solid var(--error-border);
+            border-radius: 10px;
+        }
+
+        .error-icon {
+            width: 40px;
+            height: 40px;
+            flex: 0 0 40px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: var(--error);
+            position: relative;
+        }
+
+        .error-icon::before,
+        .error-icon::after {
+            content: "";
+            position: absolute;
+            width: 18px;
+            height: 3px;
+            background: #fff;
+            border-radius: 2px;
+        }
+
+        .error-icon::before {
+            transform: rotate(45deg);
+        }
+
+        .error-icon::after {
+            transform: rotate(-45deg);
+        }
+
+        .error-content {
+            min-width: 0;
+        }
+
+        .error-title {
+            margin: 0 0 2px;
+            /* font-size: 17px; */
+            line-height: 20px;
+            font-weight: 750;
+            letter-spacing: -0.25px;
+            color: #b91c1c;
+        }
+
+        .error-description {
+            margin: 0;
+            font-size: 12px;
+            line-height: 12px;
+            color: #b91c1c;
+        }
+
         .signer-card {
             min-height: 55px;
             margin-top: 12px;
@@ -307,6 +374,11 @@
             .results {
                 width: 100%;
             }
+
+            .details-card {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px 10px;
+            }
         }
 
         @media (max-width: 420px) {
@@ -357,14 +429,14 @@
                 <h1 id="verify-title" class="page-title">Verify PO</h1>
 
                 <section class="verification-card" aria-label="Purchase order verification">
-                    <form class="verify-form">
+                    <form class="verify-form" id="verify-form">
                         <div>
                             <label for="unique-code">Unique code</label>
-                            <input id="unique-code" class="code-input" type="text" placeholder="Enter unique code"
-                                autocomplete="off">
+                            <input id="unique-code" name="unique_code" class="code-input" type="text"
+                                placeholder="Enter unique code" autocomplete="off">
                         </div>
 
-                        <button class="verify-button" type="submit">Verify</button>
+                        <button class="verify-button" id="verify-button" type="submit">Verify</button>
                     </form>
 
                     <p class="help-text">
@@ -373,7 +445,7 @@
                 </section>
             </aside>
 
-            <section class="results" aria-labelledby="results-title">
+            <section id="result-success" class="results" aria-labelledby="results-title" style="display: none;">
                 <h2 id="results-title" class="results-heading">
                     Result &amp; Approval Details
                 </h2>
@@ -422,8 +494,78 @@
                 </section>
             </section>
 
+            <section id="result-error" class="results" aria-labelledby="results-title" style="display: none;">
+                <h2 id="results-title" class="results-heading">
+                    Result &amp; Approval Details
+                </h2>
+
+                <article class="error-card" aria-label="Verification successful">
+                    <span class="error-icon" aria-hidden="true"></span>
+
+                    <div class="error-content">
+                        <h3 class="error-title">Code does not match</h3>
+                        <p class="error-description">
+                            The signature could not be confirmed. Do not process this PO yet.
+                        </p>
+                    </div>
+                </article>
+
+                <article class="signer-card" aria-label="Signer information">
+                    <p class="signer-label">Need help? Contact Procurement at procurement@qdc.co.id.</p>
+                </article>
+            </section>
+
         </div>
     </main>
+
+    <script src="{{ asset('AdminLTE-master/dist/js/sweetalert2.min.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('verify-form');
+            const input = document.getElementById('unique-code');
+            const successResult = document.getElementById('result-success');
+            const errorResult = document.getElementById('result-error');
+
+            form.addEventListener('submit', async function (event) {
+                event.preventDefault();
+
+                const uniqueCode = input.value.trim().toUpperCase();
+
+                if (!uniqueCode) {
+                    Swal.fire("Error", "The Unique code field is required", "error");
+                    return;
+                }
+
+                try {
+                    const response = await fetch(
+                        "{{ route('VerifyStorePurchaseOrder') }}",
+                        {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                unique_code: uniqueCode
+                            })
+                        }
+                    );
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        successResult.style.display = "block";
+                        errorResult.style.display = "none";
+                    } else {
+                        successResult.style.display = "none";
+                        errorResult.style.display = "block";
+                    }
+                } catch (error) {
+                    console.error('Verification error:', error);
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

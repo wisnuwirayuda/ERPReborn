@@ -63,6 +63,7 @@ Route::get('/', 'Auth\LoginController@index')->name('login');
 Route::post('loginStore', 'Auth\LoginController@loginStore')->name('loginStore');
 Route::get('FlushCache', 'Auth\LoginController@FlushCache')->name('FlushCache');
 Route::get('verify-po', 'Purchase\PurchaseOrderController@verify')->name('VerifyPurchaseOrder');
+Route::post('verify-po-store', 'Purchase\PurchaseOrderController@verifyStore')->name('VerifyStorePurchaseOrder');
 
 Route::get('SessionCheckingLogout', 'Auth\LoginController@SessionCheckingLogout')->name('SessionCheckingLogout');
 Route::get('SessionCheckingRedis', 'Auth\LoginController@SessionCheckingRedis')->name('SessionCheckingRedis');
