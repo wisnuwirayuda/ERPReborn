@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Budget\BudgetController;
 use App\Http\Controllers\Function\FunctionController;
 use App\Http\Controllers\Finance\AccountPayableController;
 use App\Http\Controllers\Purchase\PurchaseOrderController;
@@ -174,24 +175,78 @@ Route::group(['middleware' => ['prevent-back-history', 'SessionLogin']], functio
     Route::resource('BusinessDocumentVersion', 'Register\BusinessDocumentVersionController');
 
     // BUDGET
-    Route::get('ReportBudget', 'Budget\BudgetController@ReportBudget')->name('Budget.ReportBudget');
-    Route::post('ReportBudgetStore', 'Budget\BudgetController@ReportBudgetStore')->name('Budget.ReportBudgetStore');
-    Route::post('BudgetPickList', 'Budget\BudgetController@BudgetPickList')->name('Budget.BudgetPickList');
-    Route::post('RevisionModifyBudget', 'Budget\BudgetController@RevisionModifyBudget')->name('Budget.RevisionModifyBudget');
-    Route::get('ModifyBudget', 'Budget\BudgetController@ModifyBudget')->name('Budget.ModifyBudget');
-    Route::post('RevisionBudget', 'Budget\BudgetController@RevisionBudget')->name('Budget.RevisionBudget');
-    Route::post('PreviewModifyBudget', 'Budget\BudgetController@PreviewModifyBudget')->name('Budget.PreviewModifyBudget');
-    Route::post('ModifyBudget', 'Budget\BudgetController@ModifyBudgetPost')->name('Budget.ModifyBudgetPost');
-    Route::get('ReportModifyBudgetSummary', 'Budget\BudgetController@ReportModifyBudgetSummary')->name('Budget.ReportModifyBudgetSummary');
-    Route::post('ReportModifyBudgetSummaryStore', 'Budget\BudgetController@ReportModifyBudgetSummaryStore')->name('Budget.ReportModifyBudgetSummaryStore');
-    Route::post('PrintExportReportModifyBudgetSummary', 'Budget\BudgetController@PrintExportReportModifyBudgetSummary')->name('Budget.PrintExportReportModifyBudgetSummary');
-    Route::get('ReportModifyBudgetDetail', 'Budget\BudgetController@ReportModifyBudgetDetail')->name('Budget.ReportModifyBudgetDetail');
-    Route::post('ReportModifyBudgetDetailStore', 'Budget\BudgetController@ReportModifyBudgetDetailStore')->name('Budget.ReportModifyBudgetDetailStore');
-    Route::post('PrintExportReportModifyBudgetDetail', 'Budget\BudgetController@PrintExportReportModifyBudgetDetail')->name('Budget.PrintExportReportModifyBudgetDetail');
-    Route::post('BudgetImport', 'Budget\BudgetController@Import')->name('Budget.Import');
-    Route::get('BudgetDownload', 'Budget\BudgetController@Download')->name('Budget.Download');
-    Route::get('BudgetStockDetail', 'Budget\BudgetController@BudgetStockDetail')->name('Budget.BudgetStockDetail');
-    Route::resource('Budget', 'Budget\BudgetController')->only(['index', 'store']);
+    Route::controller(BudgetController::class)->group(function () {
+        Route::get('ReportBudget', 'ReportBudget')
+            ->name('Budget.ReportBudget');
+
+        Route::post('ReportBudgetStore', 'ReportBudgetStore')
+            ->name('Budget.ReportBudgetStore');
+
+        Route::post('BudgetPickList', 'BudgetPickList')
+            ->name('Budget.BudgetPickList');
+
+        Route::post('RevisionModifyBudget', 'RevisionModifyBudget')
+            ->name('Budget.RevisionModifyBudget');
+
+        Route::get('ModifyBudget', 'ModifyBudget')
+            ->name('Budget.ModifyBudget');
+
+        Route::post('RevisionBudget', 'RevisionBudget')
+            ->name('Budget.RevisionBudget');
+
+        Route::post('PreviewModifyBudget', 'PreviewModifyBudget')
+            ->name('Budget.PreviewModifyBudget');
+
+        Route::post('ModifyBudget', 'ModifyBudgetPost')
+            ->name('Budget.ModifyBudgetPost');
+
+        Route::get('ReportModifyBudgetSummary', 'ReportModifyBudgetSummary')
+            ->name('Budget.ReportModifyBudgetSummary');
+
+        Route::post('ReportModifyBudgetSummaryStore', 'ReportModifyBudgetSummaryStore')
+            ->name('Budget.ReportModifyBudgetSummaryStore');
+
+        Route::post('PrintExportReportModifyBudgetSummary', 'PrintExportReportModifyBudgetSummary')
+            ->name('Budget.PrintExportReportModifyBudgetSummary');
+
+        Route::get('ReportModifyBudgetDetail', 'ReportModifyBudgetDetail')
+            ->name('Budget.ReportModifyBudgetDetail');
+
+        Route::post('ReportModifyBudgetDetailStore', 'ReportModifyBudgetDetailStore')
+            ->name('Budget.ReportModifyBudgetDetailStore');
+
+        Route::post('PrintExportReportModifyBudgetDetail', 'PrintExportReportModifyBudgetDetail')
+            ->name('Budget.PrintExportReportModifyBudgetDetail');
+
+        Route::post('BudgetImport', 'Import')
+            ->name('Budget.Import');
+
+        Route::get('BudgetDownload', 'Download')
+            ->name('Budget.Download');
+            
+        Route::get('BudgetStockDetail', 'BudgetStockDetail')
+            ->name('Budget.BudgetStockDetail');
+    });
+    Route::resource('Budget', BudgetController::class)->only(['index', 'store']);
+    
+    // Route::get('ReportBudget', 'Budget\BudgetController@ReportBudget')->name('Budget.ReportBudget');
+    // Route::post('ReportBudgetStore', 'Budget\BudgetController@ReportBudgetStore')->name('Budget.ReportBudgetStore');
+    // Route::post('BudgetPickList', 'Budget\BudgetController@BudgetPickList')->name('Budget.BudgetPickList');
+    // Route::post('RevisionModifyBudget', 'Budget\BudgetController@RevisionModifyBudget')->name('Budget.RevisionModifyBudget');
+    // Route::get('ModifyBudget', 'Budget\BudgetController@ModifyBudget')->name('Budget.ModifyBudget');
+    // Route::post('RevisionBudget', 'Budget\BudgetController@RevisionBudget')->name('Budget.RevisionBudget');
+    // Route::post('PreviewModifyBudget', 'Budget\BudgetController@PreviewModifyBudget')->name('Budget.PreviewModifyBudget');
+    // Route::post('ModifyBudget', 'Budget\BudgetController@ModifyBudgetPost')->name('Budget.ModifyBudgetPost');
+    // Route::get('ReportModifyBudgetSummary', 'Budget\BudgetController@ReportModifyBudgetSummary')->name('Budget.ReportModifyBudgetSummary');
+    // Route::post('ReportModifyBudgetSummaryStore', 'Budget\BudgetController@ReportModifyBudgetSummaryStore')->name('Budget.ReportModifyBudgetSummaryStore');
+    // Route::post('PrintExportReportModifyBudgetSummary', 'Budget\BudgetController@PrintExportReportModifyBudgetSummary')->name('Budget.PrintExportReportModifyBudgetSummary');
+    // Route::get('ReportModifyBudgetDetail', 'Budget\BudgetController@ReportModifyBudgetDetail')->name('Budget.ReportModifyBudgetDetail');
+    // Route::post('ReportModifyBudgetDetailStore', 'Budget\BudgetController@ReportModifyBudgetDetailStore')->name('Budget.ReportModifyBudgetDetailStore');
+    // Route::post('PrintExportReportModifyBudgetDetail', 'Budget\BudgetController@PrintExportReportModifyBudgetDetail')->name('Budget.PrintExportReportModifyBudgetDetail');
+    // Route::post('BudgetImport', 'Budget\BudgetController@Import')->name('Budget.Import');
+    // Route::get('BudgetDownload', 'Budget\BudgetController@Download')->name('Budget.Download');
+    // Route::get('BudgetStockDetail', 'Budget\BudgetController@BudgetStockDetail')->name('Budget.BudgetStockDetail');
+    // Route::resource('Budget', 'Budget\BudgetController')->only(['index', 'store']);
 
     // BUDGET EXPENSE
     Route::get('BudgetExpense/GetBudget', 'BudgetExpenseController@GetBudget')->name('BudgetExpense.GetBudget');
