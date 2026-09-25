@@ -7,6 +7,7 @@ use App\Http\Controllers\Function\FunctionController;
 use App\Http\Controllers\Finance\AccountPayableController;
 use App\Http\Controllers\Purchase\PurchaseOrderController;
 use App\Http\Controllers\Purchase\PurchaseRequisitionController;
+use App\Http\Controllers\Process\Advance\AdvanceRequestController;
 
 /*
 |-------------------------------------------------------------------------- 
@@ -223,30 +224,11 @@ Route::group(['middleware' => ['prevent-back-history', 'SessionLogin']], functio
 
         Route::get('BudgetDownload', 'Download')
             ->name('Budget.Download');
-            
+
         Route::get('BudgetStockDetail', 'BudgetStockDetail')
             ->name('Budget.BudgetStockDetail');
     });
     Route::resource('Budget', BudgetController::class)->only(['index', 'store']);
-    
-    // Route::get('ReportBudget', 'Budget\BudgetController@ReportBudget')->name('Budget.ReportBudget');
-    // Route::post('ReportBudgetStore', 'Budget\BudgetController@ReportBudgetStore')->name('Budget.ReportBudgetStore');
-    // Route::post('BudgetPickList', 'Budget\BudgetController@BudgetPickList')->name('Budget.BudgetPickList');
-    // Route::post('RevisionModifyBudget', 'Budget\BudgetController@RevisionModifyBudget')->name('Budget.RevisionModifyBudget');
-    // Route::get('ModifyBudget', 'Budget\BudgetController@ModifyBudget')->name('Budget.ModifyBudget');
-    // Route::post('RevisionBudget', 'Budget\BudgetController@RevisionBudget')->name('Budget.RevisionBudget');
-    // Route::post('PreviewModifyBudget', 'Budget\BudgetController@PreviewModifyBudget')->name('Budget.PreviewModifyBudget');
-    // Route::post('ModifyBudget', 'Budget\BudgetController@ModifyBudgetPost')->name('Budget.ModifyBudgetPost');
-    // Route::get('ReportModifyBudgetSummary', 'Budget\BudgetController@ReportModifyBudgetSummary')->name('Budget.ReportModifyBudgetSummary');
-    // Route::post('ReportModifyBudgetSummaryStore', 'Budget\BudgetController@ReportModifyBudgetSummaryStore')->name('Budget.ReportModifyBudgetSummaryStore');
-    // Route::post('PrintExportReportModifyBudgetSummary', 'Budget\BudgetController@PrintExportReportModifyBudgetSummary')->name('Budget.PrintExportReportModifyBudgetSummary');
-    // Route::get('ReportModifyBudgetDetail', 'Budget\BudgetController@ReportModifyBudgetDetail')->name('Budget.ReportModifyBudgetDetail');
-    // Route::post('ReportModifyBudgetDetailStore', 'Budget\BudgetController@ReportModifyBudgetDetailStore')->name('Budget.ReportModifyBudgetDetailStore');
-    // Route::post('PrintExportReportModifyBudgetDetail', 'Budget\BudgetController@PrintExportReportModifyBudgetDetail')->name('Budget.PrintExportReportModifyBudgetDetail');
-    // Route::post('BudgetImport', 'Budget\BudgetController@Import')->name('Budget.Import');
-    // Route::get('BudgetDownload', 'Budget\BudgetController@Download')->name('Budget.Download');
-    // Route::get('BudgetStockDetail', 'Budget\BudgetController@BudgetStockDetail')->name('Budget.BudgetStockDetail');
-    // Route::resource('Budget', 'Budget\BudgetController')->only(['index', 'store']);
 
     // BUDGET EXPENSE
     Route::get('BudgetExpense/GetBudget', 'BudgetExpenseController@GetBudget')->name('BudgetExpense.GetBudget');
@@ -479,19 +461,44 @@ Route::group(['middleware' => ['prevent-back-history', 'SessionLogin']], functio
     Route::resource('TaxRecon', 'Accounting\TaxReconController');
 
     // ADVANCE REQUEST
-    Route::get('AdvanceRequest/picklist', 'Process\Advance\AdvanceRequestController@AdvancePickList')->name('AdvanceRequest.AdvancePickList');
-    Route::post('AdvanceRequest/revision', 'Process\Advance\AdvanceRequestController@RevisionAdvanceIndex')->name('AdvanceRequest.RevisionAdvanceIndex');
-    Route::post('AdvanceRequest/updates', 'Process\Advance\AdvanceRequestController@UpdatesAdvanceRequest')->name('AdvanceRequest.UpdatesAdvanceRequest');
-    Route::get('ReportAdvanceToASF', 'Process\Advance\AdvanceRequestController@ReportAdvanceToASF')->name('AdvanceRequest.ReportAdvanceToASF');
-    Route::post('AdvanceRequest/report/to-settlement/store', 'Process\Advance\AdvanceRequestController@ReportAdvanceToASFStore')->name('AdvanceRequest.ReportAdvanceToASFStore');
-    Route::post('AdvanceRequest/report/to-settlement/export', 'Process\Advance\AdvanceRequestController@PrintExportReportAdvanceToASF')->name('AdvanceRequest.PrintExportReportAdvanceToASF');
-    Route::get('ReportAdvanceSummary', 'Process\Advance\AdvanceRequestController@ReportAdvanceSummary')->name('AdvanceRequest.ReportAdvanceSummary');
-    Route::post('AdvanceRequest/report/summary/store', 'Process\Advance\AdvanceRequestController@ReportAdvanceSummaryStore')->name('AdvanceRequest.ReportAdvanceSummaryStore');
-    Route::post('AdvanceRequest/report/summary/export', 'Process\Advance\AdvanceRequestController@PrintExportReportAdvanceSummary')->name('AdvanceRequest.PrintExportReportAdvanceSummary');
-    Route::get('ReportAdvanceSummaryDetail', 'Process\Advance\AdvanceRequestController@ReportAdvanceSummaryDetail')->name('AdvanceRequest.ReportAdvanceSummaryDetail');
-    Route::post('AdvanceRequest/report/detail/store', 'Process\Advance\AdvanceRequestController@ReportAdvanceSummaryDetailStore')->name('AdvanceRequest.ReportAdvanceSummaryDetailStore');
-    Route::post('AdvanceRequest/report/detail/export', 'Process\Advance\AdvanceRequestController@PrintExportReportAdvanceSummaryDetail')->name('AdvanceRequest.PrintExportReportAdvanceSummaryDetail');
-    Route::resource('AdvanceRequest', 'Process\Advance\AdvanceRequestController')->only(['index', 'store']);
+    Route::controller(AdvanceRequestController::class)->group(function () {
+        Route::get('AdvanceRequest/picklist', 'AdvancePickList')
+            ->name('AdvanceRequest.AdvancePickList');
+
+        Route::post('AdvanceRequest/revision', 'RevisionAdvanceIndex')
+            ->name('AdvanceRequest.RevisionAdvanceIndex');
+
+        Route::post('AdvanceRequest/updates', 'UpdatesAdvanceRequest')
+            ->name('AdvanceRequest.UpdatesAdvanceRequest');
+
+        Route::get('ReportAdvanceToASF', 'ReportAdvanceToASF')
+            ->name('AdvanceRequest.ReportAdvanceToASF');
+
+        Route::post('AdvanceRequest/report/to-settlement/store', 'ReportAdvanceToASFStore')
+            ->name('AdvanceRequest.ReportAdvanceToASFStore');
+
+        Route::post('AdvanceRequest/report/to-settlement/export', 'PrintExportReportAdvanceToASF')
+            ->name('AdvanceRequest.PrintExportReportAdvanceToASF');
+
+        Route::get('ReportAdvanceSummary', 'ReportAdvanceSummary')
+            ->name('AdvanceRequest.ReportAdvanceSummary');
+
+        Route::post('AdvanceRequest/report/summary/store', 'ReportAdvanceSummaryStore')
+            ->name('AdvanceRequest.ReportAdvanceSummaryStore');
+
+        Route::post('AdvanceRequest/report/summary/export', 'PrintExportReportAdvanceSummary')
+            ->name('AdvanceRequest.PrintExportReportAdvanceSummary');
+
+        Route::get('ReportAdvanceSummaryDetail', 'ReportAdvanceSummaryDetail')
+            ->name('AdvanceRequest.ReportAdvanceSummaryDetail');
+
+        Route::post('AdvanceRequest/report/detail/store', 'ReportAdvanceSummaryDetailStore')
+            ->name('AdvanceRequest.ReportAdvanceSummaryDetailStore');
+
+        Route::post('AdvanceRequest/report/detail/export', 'PrintExportReportAdvanceSummaryDetail')
+            ->name('AdvanceRequest.PrintExportReportAdvanceSummaryDetail');
+    });
+    Route::resource('AdvanceRequest', AdvanceRequestController::class)->only(['index', 'store']);
 
     // ADVANCE SETTLEMENT
     Route::get('AdvanceSettlement/picklist', 'Process\Advance\AdvanceSettlementController@AdvanceSettlementPickList')->name('AdvanceSettlement.AdvanceSettlementPickList');
