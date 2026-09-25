@@ -209,7 +209,7 @@
                     }
                 },
                 {
-                    data: null,
+                    data: "currencyCode",
                     defaultContent: '-',
                     className: "text-wrap"
                 },
