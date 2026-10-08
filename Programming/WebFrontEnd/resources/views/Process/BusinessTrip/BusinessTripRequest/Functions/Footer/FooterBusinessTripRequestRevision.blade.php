@@ -13,6 +13,7 @@
   const date = new Date();
   const today = new Date(date.setMonth(date.getMonth() - 3));
   const subBudgetID = document.getElementById('site_id');
+  const totalJournalPayment = document.getElementById('totalJournalPayment');
   const searchBudgetBtn = document.getElementById('budget_detail_search');
   const combinedBudgetSectionDetailID = document.getElementById('combinedBudgetSectionDetail_RefID');
   const workStructureID = document.getElementById('workStructure_RefID');
@@ -912,6 +913,11 @@
   }
 
   function commentWorkflow() {
+    if (Utils.parseFloatSafe(Utils.removeCommas(validation.sectionFour.totalBusinessTrips.value)) < Utils.parseFloatSafe(Utils.removeCommas(totalJournalPayment.value))) {
+      ErrorNotif("BRF Total can't be less than BRF Payment Total!");
+      return;
+    }
+
     const swalWithBootstrapButtons = Swal.mixin({
       confirmButtonClass: 'btn btn-success btn-sm',
       cancelButtonClass: 'btn btn-danger btn-sm',

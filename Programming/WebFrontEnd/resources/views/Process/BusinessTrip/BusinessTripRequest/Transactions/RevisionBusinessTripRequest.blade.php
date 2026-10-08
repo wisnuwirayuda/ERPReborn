@@ -7,7 +7,6 @@
   @include('getFunction.getRequesters')
   @include('getFunction.getBeneficiaries')
   @include('getFunction.getBank')
-  @include('getFunction.getBanks')
   @include('getFunction.getBankLists')
   @include('getFunction.getBankAccount')
   @include('getFunction.getBusinessTripRequests')
@@ -32,6 +31,7 @@
           <form id="businessTripRequestForm">
             @csrf
             <input hidden id="budgetDetailsData" />
+            <input hidden id="totalJournalPayment" value="<?= $totalJournalPayment; ?>" />
             <input hidden id="product_RefID" name="product_RefID" value="<?= $product_RefID; ?>" />
             <input hidden id="workStructure_RefID" name="workStructure_RefID" value="<?= $workStructure_RefID; ?>" />
             <input hidden id="DocumentTypeID" name="DocumentTypeID" value="<?= $documentType_RefID; ?>">
