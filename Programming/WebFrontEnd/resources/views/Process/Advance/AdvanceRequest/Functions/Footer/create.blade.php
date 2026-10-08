@@ -51,7 +51,7 @@
     function calculateTotal() {
         let total = 0;
 
-        document.querySelectorAll('input[id^="total"]').forEach(function (input) {
+        document.querySelectorAll('input[data-field="total"]').forEach(function (input) {
             let value = parseFloat(input.value.replace(/,/g, '')); // Mengambil nilai dan menghilangkan koma
 
             if (!isNaN(value)) {
@@ -79,11 +79,16 @@
 
         if (indexProduct !== index && qty > qtyAvailable) {
             $(`#quantity${index}`).val('');
-            $(`#balance${index}`).val(Utils.formatCurrency(qtyAvailable));
+            $(`#total${index}`).val('');
+            $(`#balance${index}`).val(currency(qtyAvailable));
             ErrorNotif("Qty Req is over budget !");
+
+            calculateTotal();
+
+            return;
         } else {
             $(`#balance${index}`).val(
-                Utils.formatCurrency(qtyAvailable - qty)
+                currency(qtyAvailable - qty)
             );
         }
 
@@ -92,11 +97,16 @@
 
         if (price > priceAvailable) {
             $(`#price${index}`).val('');
+            $(`#total${index}`).val('');
             ErrorNotif("Price Req is over budget !");
+
+            calculateTotal();
+
+            return;
         }
 
         $(`#total${index}`).val(
-            Utils.formatCurrency(qty * price)
+            currency(qty * price)
         );
 
         calculateTotal();
@@ -304,11 +314,11 @@
                             ${productColumn}
 
                             <td style="text-align: center;">
-                                ${Utils.formatCurrency(value.quantity)}
+                                ${currency(value.quantity)}
                             </td>
                             
                             <td style="text-align: center;">
-                                ${value.productName === "Unspecified Product" ? '-' : Utils.formatCurrency(value.quantityRemaining)}
+                                ${value.productName === "Unspecified Product" ? '-' : currency(value.quantityRemaining)}
                             </td>
                             
                             <td data-field="uom" style="text-align: center;">
@@ -316,11 +326,11 @@
                             </td>
                             
                             <td style="text-align: center;">
-                                ${Utils.formatCurrency(value.priceBaseCurrencyValue)}
+                                ${currency(value.priceBaseCurrencyValue)}
                             </td>
 
                             <td style="text-align: center;">
-                                ${Utils.formatCurrency(totalBudget)}
+                                ${currency(totalBudget)}
                             </td>
 
                             <td style="text-align: center;">
