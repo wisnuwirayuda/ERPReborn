@@ -57,7 +57,7 @@
             totalDebitCredit();
         });
 
-        let result = totalEndingBalance + parseFloat(total);
+        let result = totalEndingBalance - parseFloat(total);
 
         document.getElementById('nominal_variance').textContent = `IDR ${currencyTotal(total)}`;
 
