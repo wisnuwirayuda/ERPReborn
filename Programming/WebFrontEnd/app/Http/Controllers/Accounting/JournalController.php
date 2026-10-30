@@ -87,10 +87,10 @@ class JournalController extends Controller
                     'id' => $data['bankAccount_RefID'],
                     'code' => $data['bankAccountNumber'],
                     'name' => $data['bankAcronym'] . ' - ' . $data['bankAccountName']
-                ],
+                ]
             ];
 
-            dump($compact);
+            // dump($compact);
 
             return view('Finance.Journal.Transactions.revision', $compact);
         } catch (\Throwable $th) {

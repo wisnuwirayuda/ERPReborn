@@ -13,6 +13,8 @@
     const dataJournalDetails = {!! json_encode($details ?? []) !!};
 
     function initialData() {
+        console.log('dataJournalDetails', dataJournalDetails);
+
         for (const detail of dataJournalDetails) {
             journalDetails.push({
                 business_document_id: detail.entities[0].businessDocument_RefID, // 74000000028344,
@@ -22,16 +24,16 @@
                 trans_number_quantity: Utils.formatCurrency(detail.entities[0].quantity || '0.00'), // "0.01",
                 trans_number_currency_id: detail.entities[0].amountCurrency_RefID, // 62000000000001,
                 trans_number_currency_rate: Utils.formatCurrency(detail.entities[0].amountCurrencyExchangeRate || '0.00'), // "1.00",
-                debit_credit_id: "214000000000001",
+                debit_credit_id: detail.entities[0].combinedBudgetCode,
                 budget_preview: `${detail.entities[0].combinedBudgetCode} - ${detail.entities[0].combinedBudgetName}`, // "Q000062 - XL Microcell 2007",
                 budget_id: detail.entities[0].combinedBudget_RefID,
                 budget_code: detail.entities[0].combinedBudgetCode,
                 budget_name: detail.entities[0].combinedBudgetName,
-                trans_value: "1856.94",
-                unpaid_value: 1853.7,
+                trans_value: Utils.formatCurrency(detail.transactionValue || '0.00'),
+                unpaid_value: Utils.formatCurrency(detail.transactionUnpaid || '0.00'),
                 payment_value: Utils.formatCurrency(detail.entities[0].amountCurrencyValue || '0.00'),
-                variance_value: 82723.21,
-                balance_value: 1824.82,
+                variance_value: Utils.formatCurrency(detail.variance || '0.00'),
+                balance_value: detail.transactionValue - detail.entities[0].amountCurrencyValue,
                 from_to_preview: `(${detail.entities[0].beneficiaryOrSenderBankAccountAcronym}) ${detail.entities[0].beneficiaryOrSenderBankAccountNumber} a.n ${detail.entities[0].beneficiaryOrSenderBankAccountName}`, // "Bank Central Asia (BCA) 5750423347 a.n. Agus Salim",
                 from_to_id: detail.entities[0].beneficiaryOrSenderBankAccount_RefID,
                 from_to_code: detail.entities[0].beneficiaryOrSenderBankAccountAcronym,
