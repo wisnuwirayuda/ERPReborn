@@ -115,6 +115,11 @@ class BudgetController extends Controller
         return view('Budget.Modify.Transactions.create', $compact);
     }
 
+    public function storeModify(Request $request)
+    {
+
+    }
+
     public function previewModify(Request $request)
     {
         $token = Session::get('SessionLogin');

@@ -285,6 +285,9 @@ Route::group(['middleware' => ['prevent-back-history', 'SessionLogin']], functio
 
         Route::post('Budget/modify/preview', 'previewModify')
             ->name('Budget.modify.preview');
+
+        Route::post('Budget/modify/store', 'storeModify')
+            ->name('Budget.modify.store');
     });
     Route::resource('Budget', BudgetController::class)->only(['index', 'store']);
 
