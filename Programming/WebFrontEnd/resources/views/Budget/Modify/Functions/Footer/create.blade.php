@@ -533,6 +533,27 @@
                         value="${row.priceBudget || '0'}"
                     />
 
+                    <input
+                        type="hidden"
+                        id="productCode${index}"
+                        name="additionalData[${index}][productCode]"
+                        value="${row.productCode}"
+                    />
+
+                    <input
+                        type="hidden"
+                        id="productName${index}"
+                        name="additionalData[${index}][productName]"
+                        value="${row.productName}"
+                    />
+
+                    <input
+                        type="hidden"
+                        id="totalBudget${index}"
+                        name="additionalData[${index}][totalBudget]"
+                        value="${row.total}"
+                    />
+
                     ${actionDefault}
 
                     <td style="text-align: center;">
@@ -567,6 +588,7 @@
                             autocomplete="off" 
                             style="border-radius:0px;"
                             oninput="calculateTotalLine(${index})"
+                            name="additionalData[${index}][quantityInput]"
                         />
                     </td>
 
@@ -578,6 +600,7 @@
                             autocomplete="off" 
                             style="border-radius:0px;"
                             oninput="calculateTotalLine(${index})"
+                            name="additionalData[${index}][priceInput]"
                         />
                     </td>
 
@@ -588,6 +611,7 @@
                             class="form-control" 
                             autocomplete="off" 
                             style="border-radius:0px;" 
+                            name="additionalData[${index}][totalInput]"
                             readonly
                         />
                     </td>
