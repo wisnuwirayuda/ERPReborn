@@ -17,7 +17,7 @@
                 Budget Code
             </div>
             <div class="col">
-                : Q000062 - XL Microcell 2007
+                : <?= $dataHeader['budgetCode']; ?> - <?= $dataHeader['budgetName']; ?>
             </div>
         </div>
 
@@ -27,7 +27,7 @@
                 Date
             </div>
             <div class="col">
-                : 2025-11-18
+                : <?= $dataHeader['date']; ?>
             </div>
         </div>
 
@@ -37,7 +37,7 @@
                 Type
             </div>
             <div class="col">
-                : <?= $dataHeader['type']; ?>
+                : <?= $dataHeader['type'] == "PRODUCT_BASE" ? 'Product Base' : 'Sub Budget Base'; ?>
             </div>
         </div>
     </div>
@@ -47,11 +47,11 @@
     <div class="form-group">
         <!-- REQUESTER -->
         <div class="row" style="margin-bottom: 1rem;">
-            <div class="col-4 text-bold">
+            <div class="col-4 col-sm-4 col-md-3 col-lg-3 text-bold">
                 Currency
             </div>
             <div class="col">
-                : <?= $dataHeader['currency']; ?>
+                : <?= $dataHeader['currencyCode']; ?> - <?= $dataHeader['currencyName']; ?>
             </div>
         </div>
 

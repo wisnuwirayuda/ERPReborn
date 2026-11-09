@@ -76,7 +76,7 @@ class CheckDocumentController extends Controller
                 $documentType === 'Product Form' ||
                 $documentType === 'Sales Invoice Form' ||
                 $documentType === 'Sallary Allocation Form' ||
-                $documentType === 'Sales Order Form' ||
+                // $documentType === 'Sales Contract Form' ||
                 $documentType === 'Supplier Form' ||
                 $documentType === 'Stock Opname Form' ||
                 $documentType === 'Material Disposal Form' ||
@@ -591,7 +591,7 @@ class CheckDocumentController extends Controller
                     ]
                 ];
                 break;
-            // case "Sales Order Form":
+            // case "Sales Contract Form":
             //     $varData = [
             //         'data' => [
             //             'data' => [
