@@ -850,6 +850,8 @@ class DocumentTypeMapper
                     'fileID' => $dataDetail['Log_FileUpload_Pointer_RefID'] ?? null,
                     'budgetCode' => $dataDetail['CombinedBudgetCode'] ?? null,
                     'budgetName' => $dataDetail['CombinedBudgetName'] ?? null,
+                    'vatStatus' => $dataDetail['VatStatus'] ?? '',
+                    'vatRatio' => $dataDetail['VatRatio'] ?? ''
                 ],
                 'components' => [
                     'detail' => 'Components.CustomerOrderDetailDocument',

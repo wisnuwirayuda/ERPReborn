@@ -32,7 +32,7 @@
         </div>
 
         <!-- TYPE -->
-        <div class="row" style="margin-bottom: 1rem;">
+        <div class="row">
             <div class="col-4 col-sm-4 col-md-3 col-lg-3 text-bold">
                 Type
             </div>
@@ -45,13 +45,23 @@
 
 <div class="col-12 col-md-5 col-lg-4">
     <div class="form-group">
-        <!-- REQUESTER -->
+        <!-- CURRENCY -->
         <div class="row" style="margin-bottom: 1rem;">
             <div class="col-4 col-sm-4 col-md-3 col-lg-3 text-bold">
                 Currency
             </div>
             <div class="col">
                 : <?= $dataHeader['currencyCode']; ?> - <?= $dataHeader['currencyName']; ?>
+            </div>
+        </div>
+
+        <!-- VAT -->
+        <div class="row" style="margin-bottom: 1rem;">
+            <div class="col-4 col-sm-4 col-md-3 col-lg-3 text-bold">
+                VAT
+            </div>
+            <div class="col">
+                : <?= $dataHeader['vatStatus'] == "YES" ? $dataHeader['vatRatio'] : 'No'; ?>
             </div>
         </div>
 
