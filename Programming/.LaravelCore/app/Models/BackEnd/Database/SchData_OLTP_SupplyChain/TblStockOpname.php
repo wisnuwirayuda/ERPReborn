@@ -112,5 +112,83 @@ namespace App\Models\Database\SchData_OLTP_SupplyChain {
             return
                 $varReturn['data'][0];
         }
+
+        /*
+        +--------------------------------------------------------------------------------------------------------------------------+
+        | ▪ Method Name     : setDataUpdate                                                                                        |
+        +--------------------------------------------------------------------------------------------------------------------------+
+        | ▪ Version         : 1.0000.0000000                                                                                       |
+        | ▪ Last Update     : 2026-11-10                                                                                           |
+        | ▪ Creation Date   : 2026-11-10                                                                                           |
+        | ▪ Description     : Data Update                                                                                          |
+        +--------------------------------------------------------------------------------------------------------------------------+
+        | ▪ Input Variable  :                                                                                                      |
+        |      ▪ (mixed)  varUserSession ► User Session                                                                            |
+        |      ▪ (int)    varSysID ► System Record ID                                                                              |
+        |      ▪ (string) varSysDataAnnotation ► System Data Annotation                                                            |
+        |      ▪ (string) varSysDataValidityStartDateTimeTZ ► System Data Validity Start DateTimeTZ                                |
+        |      ▪ (string) varSysDataValidityFinishDateTimeTZ ► System Validity Finish DateTimeTZ                                   |
+        |      ▪ (string) varSysPartitionRemovableRecordKeyRefType ► System Partition Removable Record Key Reference Type          |
+        |      ▪ (int)    varSysBranch_RefID ► System Branch Reference ID                                                          |
+        |      ▪ (int)    varSysBaseCurrency_RefID ► System Base Currency Reference ID                                             |
+        |        ----------------------------------------                                                                          |
+        |      ▪ (string) varDocumentDateTimeTZ ► Document DateTimeTZ                                                              |
+        |      ▪ (string) varType ► Type                                                                                     |
+        |        ----------------------------------------                                                                          |
+        |      ▪ (array)  varAdditionalData ► Additional Data                                                                      |
+        | ▪ Output Variable :                                                                                                      |
+        |      ▪ (array)  varReturn                                                                                                | 
+        +--------------------------------------------------------------------------------------------------------------------------+
+        */
+        public function setDataUpdate(
+            $varUserSession,
+            int $varSysID,
+            string $varSysDataAnnotation = null,
+            string $varSysDataValidityStartDateTimeTZ = null,
+            string $varSysDataValidityFinishDateTimeTZ = null,
+            int $varSysPartitionRemovableRecordKeyRefType = null,
+            int $varSysBranch_RefID = null,
+            $varSysBaseCurrency_RefID = null,
+            string $varDocumentDateTimeTZ = null,
+            string $varType = null,
+            array $varAdditionalData = []
+        ) {
+            $varReturn =
+                \App\Helpers\ZhtHelper\Database\Helper_PostgreSQL::getQueryExecution(
+                    $varUserSession,
+                    \App\Helpers\ZhtHelper\Database\Helper_PostgreSQL::getBuildStringLiteral_StoredProcedure(
+                        $varUserSession,
+                        parent::getSchemaName($varUserSession) . '.Func_' . parent::getTableName($varUserSession) . '_SET',
+                        [
+                            [$varUserSession, 'bigint'],
+                            [$varSysID, 'bigint'],
+
+                            [$varSysDataAnnotation, 'varchar'],
+                            [$varSysDataValidityStartDateTimeTZ, 'timestamptz'],
+                            [$varSysDataValidityFinishDateTimeTZ, 'timestamptz'],
+                            [$varSysPartitionRemovableRecordKeyRefType, 'varchar'],
+                            [$varSysBranch_RefID, 'bigint'],
+                            [$varSysBaseCurrency_RefID, 'bigint'],
+
+                            [$varDocumentDateTimeTZ, 'timestamptz'],
+                            [$varType, 'varchar'],
+
+                            [
+                                ((count($varAdditionalData) === 0)
+                                    ? null
+                                    : \App\Helpers\ZhtHelper\General\Helper_Encode::getJSONEncode(
+                                        $varUserSession,
+                                        $varAdditionalData
+                                    )
+                                ),
+                                'json'
+                            ]
+                        ]
+                    )
+                );
+
+            return
+                $varReturn['data'][0];
+        }
     }
 }
