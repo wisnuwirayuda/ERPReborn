@@ -218,7 +218,6 @@ class BudgetService
         );
     }
 
-
     public function create($request): mixed
     {
         $token = Session::get('SessionLogin');
@@ -240,5 +239,36 @@ class BudgetService
         }
 
         return $response;
+    }
+
+    public function createModify($request): mixed
+    {
+        $token = Session::get('SessionLogin');
+
+        $budgetID = $request->input('budget_id');
+        $subBudgetID = $request->input('sub_budget_id');
+
+        $data = json_decode($request->input('modify_budget_data'), true);
+
+        return Helper_APICall::setCallAPIGateway(
+            Helper_Environment::getUserSessionID_System(),
+            $token,
+            'transaction.mergeModify.budgeting.setCombinedBudgetSectionDetail',
+            'latest',
+            [
+                'recordID' => (int) $budgetID,
+                'entities' => [
+                    'itemList' => [
+                        [
+                            'index' => 1,
+                            'recordID' => (int) $subBudgetID,
+                            'entities' => [
+                                'itemList' => $data
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        );
     }
 }

@@ -7,6 +7,7 @@
     const documentTypeRefID = {!! json_encode($documentTypeRefID ?? '') !!};
     const reasonForModify = document.getElementById('reason_for_modify');
     const subBudgetCodeID = document.getElementById('sub_budget_id');
+    const exchangeRate = document.getElementById('exchange_rate');
 
     function coRevisedHandler(e) {
         if (e.value == "no") {
@@ -64,9 +65,14 @@
     }
 
     function showPreviewSummary() {
+        let index = 0;
+        let data = [];
+
         const sourceTable = document.getElementById('budget_details_table').getElementsByTagName('tbody')[0];
         const targetTable = document.getElementById('preview_details_table').getElementsByTagName('tbody')[0];
 
+        data = [];
+        index = 0;
         targetTable.innerHTML = '';
 
         const rows = sourceTable.getElementsByTagName('tr');
@@ -82,6 +88,11 @@
         }
 
         for (let row of rows) {
+            const productRefID = row.querySelector('[data-field="productRefID"]');
+            const quantityUnitRefID = row.querySelector('[data-field="quantityUnitRefID"]');
+            const workRefID = row.querySelector('[data-field="workRefID"]');
+            const unitPriceCurrencyRefID = row.querySelector('[data-field="unitPriceCurrencyRefID"]');
+            const unitPriceCurrencyExchangeRate = row.querySelector('[data-field="unitPriceCurrencyExchangeRate"]');
             const productInformation = row.querySelector('[data-field="product"]');
             const totalBudgetInformation = row.querySelector('[data-field="totalBudget"]');
 
@@ -97,12 +108,27 @@
                 priceInput.value.trim() !== '' &&
                 totalInput.value.trim() !== ''
             ) {
+                index++;
+
                 const product = productInformation?.value?.trim();
                 const totalBudget = totalBudgetInformation?.value?.trim();
 
                 const price = priceInput.value.trim();
                 const qty = qtyInput.value.trim();
                 const total = totalInput.value.trim();
+
+                data.push({
+                    index: index, // here
+                    recordID: parseInt(productRefID.value),
+                    entities: {
+                        quantity: Utils.parseFloatSafe(Utils.removeCommas(qty)),
+                        quantityUnit_RefID: parseInt(quantityUnitRefID.value),
+                        unitPriceCurrency_RefID: parseInt(unitPriceCurrencyRefID.value),
+                        unitPriceCurrencyValue: Utils.parseFloatSafe(Utils.removeCommas(price)),
+                        unitPriceCurrencyExchangeRate: Utils.parseFloatSafe(Utils.removeCommas(unitPriceCurrencyExchangeRate.value)),
+                        work_RefID: parseInt(workRefID.value)
+                    }
+                });
 
                 const newRow = document.createElement('tr');
                 newRow.innerHTML = `
@@ -128,7 +154,40 @@
             `;
         }
 
+        $('#modify_budget_data').val(JSON.stringify(data));
         $('#reason_for_modify_label').text(reasonForModify.value);
+    }
+
+    function commentWorkflow() {
+        const currentComment = document.getElementById('workflow_comment').value || "";
+
+        const swalWithBootstrapButtons = Swal.mixin({
+            confirmButtonClass: 'btn btn-success btn-sm',
+            cancelButtonClass: 'btn btn-danger btn-sm',
+            buttonsStyling: true,
+        });
+
+        swalWithBootstrapButtons.fire({
+            title: 'Comment',
+            text: "Please write your comment here",
+            type: 'question',
+            input: 'textarea',
+            inputValue: currentComment,
+            showCloseButton: false,
+            showCancelButton: true,
+            focusConfirm: false,
+            cancelButtonText: '<span style="color:black;"> Cancel </span>',
+            confirmButtonText: '<span style="color:black;"> OK </span>',
+            cancelButtonColor: '#DDDAD0',
+            confirmButtonColor: '#DDDAD0',
+            reverseButtons: true
+        }).then((result) => {
+            if ('value' in result) {
+                $("#workflow_comment").val(result.value);
+
+                document.getElementById('modifyBudgetForm').requestSubmit();
+            }
+        });
     }
 
     /* START OF CUSTOMER ORDER SECTION */
@@ -259,11 +318,11 @@
                             -
                         </td>
                         
-                        <td class="d-none" style="text-align: center;">
+                        <td class="d-none" style="text-wrap: auto; line-height: normal;">
                             -
                         </td>
 
-                        <td style="text-align: center;">
+                        <td style="text-wrap: auto; line-height: normal;">
                             ${row.productCode} - ${row.productName}
                         </td>
 
@@ -465,6 +524,8 @@
         const newRow = {
             isOrigin: false,
             combinedBudgetSectionDetail_RefID: '',
+            quantityUnit_RefID: '',
+            unitPriceCurrency_RefID: '',
             work_RefID: '',
             workCode: '',
             workName: '',
@@ -591,17 +652,52 @@
                             -
                         </td>
                         
-                        <td style="text-align: center;">
+                        <td style="text-wrap: auto; line-height: normal;">
                             -
                         </td>
 
-                        <td style="text-align: center;">
+                        <td style="text-wrap: auto; line-height: normal;">
                             ${row.productCode} - ${row.productName}
                         </td>
                     `;
                 }
 
                 tr.innerHTML = `
+                    <input
+                        type="hidden"
+                        id="workRefID${index}"
+                        data-field="workRefID"
+                        value="${row.work_RefID}"
+                    />
+
+                    <input
+                        type="hidden"
+                        id="productRefID${index}"
+                        data-field="productRefID"
+                        value="${row.product_RefID}"
+                    />
+
+                    <input
+                        type="hidden"
+                        id="quantityUnitRefID${index}"
+                        data-field="quantityUnitRefID"
+                        value="${row.quantityUnit_RefID}"
+                    />
+
+                    <input
+                        type="hidden"
+                        id="unitPriceCurrencyRefID${index}"
+                        data-field="unitPriceCurrencyRefID"
+                        value="${row.unitPriceCurrency_RefID}"
+                    />
+
+                    <input
+                        type="hidden"
+                        id="unitPriceCurrencyExchangeRate${index}"
+                        data-field="unitPriceCurrencyExchangeRate"
+                        value="${exchangeRate.value}"
+                    />
+
                     <input
                         type="hidden"
                         id="quantityAvailable${index}"
@@ -720,7 +816,9 @@
                         budgetDetails.push({
                             isOrigin: true,
                             combinedBudgetSectionDetail_RefID: value.sys_ID,
-                            work_RefID: '',
+                            quantityUnit_RefID: value.quantityUnit_RefID,
+                            unitPriceCurrency_RefID: value.unitPriceCurrency_RefID,
+                            work_RefID: 302000000000001,
                             workCode: '',
                             workName: '',
                             product_RefID: value.product_RefID,
@@ -831,6 +929,70 @@
             }
         });
     }
+
+    $('#modifyBudgetForm').on('submit', function (e) {
+        e.preventDefault();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            type: 'POST',
+            url: '{!! route("Budget.modify.store") !!}',
+            data: $(this).serialize(),
+            beforeSend: function () {
+                Utils.showLoading();
+            },
+            success: function (response) {
+                Utils.hideLoading();
+
+                if (response.status == 200) {
+                    const swalWithBootstrapButtons = Swal.mixin({
+                        confirmButtonClass: 'btn btn-success btn-sm',
+                        cancelButtonClass: 'btn btn-danger btn-sm',
+                        buttonsStyling: true,
+                    });
+
+                    swalWithBootstrapButtons.fire({
+                        title: 'Successful !',
+                        type: 'success',
+                        html: 'Data has been saved.',
+                        showCloseButton: false,
+                        showCancelButton: false,
+                        focusConfirm: false,
+                        confirmButtonText: '<span style="color:black;"> OK </span>',
+                        confirmButtonColor: '#4B586A',
+                        confirmButtonColor: '#e9ecef',
+                        reverseButtons: true
+                    }).then((result) => {
+                        cancelForm("{{ route('Budget.modify') }}");
+                    });
+                } else {
+                    ErrorNotif("Create Modify Budget Failed");
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseJSON);
+
+                Utils.hideLoading();
+
+                // if (jqXHR.status === 422) {
+                //     let errors = jqXHR.responseJSON.errors;
+
+                //     $.each(errors, function (key, value) {
+                //         // console.log(key + ': ' + value[0]);
+
+                //         if (formList[key]) {
+                //             ErrorHandler.showErrorInputMessage(formList[key].component, formList[key].containerMessageId, formList[key].messageId, value[0]);
+                //         }
+                //     });
+                // }
+            }
+        });
+    });
 
     $('#budget_code_list_table').on('click', 'tbody tr', function () {
         const table = $('#budget_code_list_table').DataTable();

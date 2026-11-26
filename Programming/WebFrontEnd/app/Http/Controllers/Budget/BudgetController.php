@@ -169,7 +169,38 @@ class BudgetController extends Controller
 
     public function storeModify(Request $request)
     {
+        try {
+            $response = $this->budgetService->createModify($request);
 
+            if ($response['metadata']['HTTPStatusCode'] !== 200) {
+                throw new \Exception('Failed to fetch Create Modify Budget => ' . $response['data']['message']);
+            }
+
+            // $workflowPathID = $request->input('workflow_path_id');
+            // $workflowComment = $request->input('workflow_comment');
+
+            // $responseWorkflow = $this->workflowService->submit(
+            //     $response['data']['businessDocument']['businessDocument_RefID'],
+            //     $workflowPathID,
+            //     $workflowComment,
+            //     null
+            // );
+
+            // if ($responseWorkflow['metadata']['HTTPStatusCode'] !== 200) {
+            //     throw new \Exception('Failed to fetch Submit Workflow Create Advance Request => ' . $responseWorkflow['data']['message']);
+            // }
+
+            $compact = [
+                // "documentNumber" => $response['data']['businessDocument']['documentNumber'],
+                "status" => $response['metadata']['HTTPStatusCode'],
+            ];
+
+            return response()->json($compact);
+        } catch (\Throwable $th) {
+            Log::error("Store Modify Budget Function Error: " . $th->getMessage());
+
+            return response()->json(["status" => 500]);
+        }
     }
 
     public function previewModify(Request $request)
