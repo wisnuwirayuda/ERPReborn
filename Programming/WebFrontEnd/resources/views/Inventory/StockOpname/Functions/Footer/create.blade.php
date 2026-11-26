@@ -29,20 +29,13 @@
         let countedItems = 0;
 
         $('#tableStockOpname tbody tr').each(function () {
-
             let row = $(this);
 
-            let good = parseFloat(
-                row.find('.qty-good').val()
-            ) || 0;
+            let good = Utils.parseFloatSafe(Utils.removeCommas(row.find('.qty-good').val() || 0));
 
-            let reject = parseFloat(
-                row.find('.qty-reject').val()
-            ) || 0;
+            let reject = Utils.parseFloatSafe(Utils.removeCommas(row.find('.qty-reject').val() || 0));
 
-            let system = parseFloat(
-                row.find('[id^="system_"]').text()
-            ) || 0;
+            let system = Utils.parseFloatSafe(Utils.removeCommas(row.find('[id^="system_"]').text() || 0));
 
             let total = good + reject;
 
@@ -120,77 +113,77 @@
 
                         if (type.value == "ALL") {
                             row = `
-                            <tr>
-                                <td style="text-align: center;">${value.ProductCode}</td>
-                                <td>${value.ProductName}</td>
-                                <td style="text-align: center;">${value.QuantityUnitName}</td>
-                                <td style="text-align: center;" id="system_${key}">${value.QuantityStok}</td>
-                                <td style="text-align: center;">${value.WarehouseCode} - ${value.WarehouseName}</td>
-                                <td>
-                                    <input
-                                        class="form-control number-only qty-good"
-                                        id="qty_good${key}"
-                                        data-row="${key}"
-                                        autocomplete="off"
-                                        style="border-radius:0px;"
-                                        value="0"
-                                        oninput="$('#stockOpnameType').prop('disabled', true)"
-                                    />
-                                </td>
-                                <td>
-                                    <input
-                                        class="form-control number-only qty-reject"
-                                        id="qty_reject${key}"
-                                        data-row="${key}"
-                                        autocomplete="off"
-                                        style="border-radius:0px;"
-                                        value="0"
-                                        oninput="$('#stockOpnameType').prop('disabled', true)"
-                                    />
-                                </td>
-                                <td style="text-align: center;" id="total_${key}">0</td>
-                                <td style="text-align: center;" id="status_${key}">-</td>
-                                <td style="text-align: center;">-</td>
-                                <td style="text-align: center;">
-                                    <textarea class="form-control"></textarea>
-                                </td>
-                            </tr>
-                        `;
+                                <tr>
+                                    <td style="text-align: center;">${value.ProductCode}</td>
+                                    <td>${value.ProductName}</td>
+                                    <td style="text-align: center;">${value.QuantityUnitName}</td>
+                                    <td style="text-align: center;" id="system_${key}">${value.QuantityStok}</td>
+                                    <td style="text-align: center;">${value.WarehouseCode} - ${value.WarehouseName}</td>
+                                    <td>
+                                        <input
+                                            class="form-control number-only qty-good"
+                                            id="qty_good${key}"
+                                            data-row="${key}"
+                                            autocomplete="off"
+                                            style="border-radius:0px;"
+                                            value="0"
+                                            oninput="$('#stockOpnameType').prop('disabled', true)"
+                                        />
+                                    </td>
+                                    <td>
+                                        <input
+                                            class="form-control number-only qty-reject"
+                                            id="qty_reject${key}"
+                                            data-row="${key}"
+                                            autocomplete="off"
+                                            style="border-radius:0px;"
+                                            value="0"
+                                            oninput="$('#stockOpnameType').prop('disabled', true)"
+                                        />
+                                    </td>
+                                    <td style="text-align: center;" id="total_${key}">0</td>
+                                    <td style="text-align: center;" id="status_${key}">-</td>
+                                    <td style="text-align: center;">-</td>
+                                    <td style="text-align: center;">
+                                        <textarea class="form-control"></textarea>
+                                    </td>
+                                </tr>
+                            `;
                         } else {
                             row = `
-                            <tr>
-                                <td style="text-align: center;">${value.ProductCode}</td>
-                                <td>${value.ProductName}</td>
-                                <td style="text-align: center;">${value.QuantityUnitName}</td>
-                                <td style="text-align: center;" id="system_${key}">${value.QuantityStok}</td>
-                                <td>
-                                    <input
-                                        class="form-control number-only qty-good"
-                                        id="qty_good${key}"
-                                        data-row="${key}"
-                                        autocomplete="off"
-                                        style="border-radius:0px;"
-                                        value="0"
-                                    />
-                                </td>
-                                <td>
-                                    <input
-                                        class="form-control number-only qty-reject"
-                                        id="qty_reject${key}"
-                                        data-row="${key}"
-                                        autocomplete="off"
-                                        style="border-radius:0px;"
-                                        value="0"
-                                    />
-                                </td>
-                                <td style="text-align: center;" id="total_${key}">0</td>
-                                <td style="text-align: center;" id="status_${key}">-</td>
-                                <td style="text-align: center;">-</td>
-                                <td style="text-align: center;">
-                                    <textarea class="form-control"></textarea>
-                                </td>
-                            </tr>
-                        `;
+                                <tr>
+                                    <td style="text-align: center;">${value.ProductCode}</td>
+                                    <td>${value.ProductName}</td>
+                                    <td style="text-align: center;">${value.QuantityUnitName}</td>
+                                    <td style="text-align: center;" id="system_${key}">${value.QuantityStok}</td>
+                                    <td>
+                                        <input
+                                            class="form-control number-only qty-good"
+                                            id="qty_good${key}"
+                                            data-row="${key}"
+                                            autocomplete="off"
+                                            style="border-radius:0px;"
+                                            value="0"
+                                        />
+                                    </td>
+                                    <td>
+                                        <input
+                                            class="form-control number-only qty-reject"
+                                            id="qty_reject${key}"
+                                            data-row="${key}"
+                                            autocomplete="off"
+                                            style="border-radius:0px;"
+                                            value="0"
+                                        />
+                                    </td>
+                                    <td style="text-align: center;" id="total_${key}">0</td>
+                                    <td style="text-align: center;" id="status_${key}">-</td>
+                                    <td style="text-align: center;">-</td>
+                                    <td style="text-align: center;">
+                                        <textarea class="form-control"></textarea>
+                                    </td>
+                                </tr>
+                            `;
                         }
 
                         tbodyTableStockOpname.append(row);
